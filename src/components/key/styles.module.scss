@@ -1,0 +1,15 @@
+.key {
+  display: flex;
+  width: 1.5em;
+  height: 1.5em;
+  padding: 1em;
+  font-weight: bold;
+  outline: 1px solid #eee;
+  border-radius: 2px;
+  align-items: center;
+  place-content: center;
+
+  &.pressed {
+    background-color: royalblue;
+  }
+}

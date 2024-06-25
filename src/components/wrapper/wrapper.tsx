@@ -1,6 +1,6 @@
 "use client";
 
-import Keys from "./keys";
+import Keys from "@/components/keys/keys";
 
 export default function wrapper() {
   return <Keys />
