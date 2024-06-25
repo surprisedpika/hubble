@@ -1,10 +1,6 @@
-import type { Metadata } from "next";
-import "./globals.css";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Hubble",
-  description: "Input Viewer",
-};
+import "./globals.css";
 
 export default function RootLayout({
   children,

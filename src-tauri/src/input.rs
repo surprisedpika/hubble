@@ -1,16 +1,20 @@
-use std::collections::HashMap;
-use rdev::{listen, Event};
+use rdev::{ listen, Event };
+
+use crate::get_keys;
 
 pub fn start() {
-    fn callback(event: Event) {
+    let callback = move |event: Event| {
+        let keys = get_keys();
         match event.event_type {
-            rdev::EventType::KeyPress(key) => println!("Key Pressed: {:?}", key),
-            rdev::EventType::KeyRelease(key) => println!("Key Released: {:?}", key),
+            rdev::EventType::KeyPress(key) => {
+                keys.write().unwrap().insert(key);
+            }
+            rdev::EventType::KeyRelease(key) => {
+                keys.write().unwrap().remove(&key);
+            }
             _ => {}
         }
-    }
+    };
 
-    if let Err(error) = listen(callback) {
-        println!("Error: {:?}", error);
-    }
+    listen(callback).unwrap();
 }

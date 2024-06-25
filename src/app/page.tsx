@@ -1,5 +1,5 @@
-export default function Home() {
-  return (
-    <h1>What the scallop</h1>
-  );
+import Wrapper from "./wrapper";
+
+export default function page() {
+  return <Wrapper />
 }
