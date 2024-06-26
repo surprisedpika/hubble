@@ -23,10 +23,12 @@ export default function Keys() {
   }, []);
   return (
     <div className={styles.keys}>
-      <Key label="W" isPressed={keys.has("KeyW")} />
-      <Key label="A" isPressed={keys.has("KeyA")} />
-      <Key label="S" isPressed={keys.has("KeyS")} />
-      <Key label="D" isPressed={keys.has("KeyD")} />
+      <Key label="W" isPressed={keys.has("kb_KeyW")} />
+      <Key label="A" isPressed={keys.has("kb_KeyA")} />
+      <Key label="S" isPressed={keys.has("kb_KeyS")} />
+      <Key label="D" isPressed={keys.has("kb_KeyD")} />
+      <Key label="^" isPressed={keys.has("mw_Up")} />
+      <Key label="L" isPressed={keys.has("ms_Left")} />
     </div>
   );
 }
