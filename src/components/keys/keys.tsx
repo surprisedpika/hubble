@@ -3,7 +3,7 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { useEffect, useState } from "react";
 
-import styles from "./styles.module.scss"
+import styles from "./styles.module.scss";
 import Key from "../key/key";
 
 export default function Keys() {
@@ -27,7 +27,10 @@ export default function Keys() {
       <Key label="A" isPressed={keys.has("kb_KeyA")} />
       <Key label="S" isPressed={keys.has("kb_KeyS")} />
       <Key label="D" isPressed={keys.has("kb_KeyD")} />
-      <Key label="^" isPressed={keys.has("mw_Up")} />
+      <Key
+        label="^"
+        isPressed={keys.has("mw_Up") || keys.has("ms_Unknown(2)")} // For when using stray macro
+      />
       <Key label="L" isPressed={keys.has("ms_Left")} />
     </div>
   );

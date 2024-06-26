@@ -19,7 +19,6 @@ pub fn start() {
                 keys.write().unwrap().remove(&format!("ms_{:?}", button));
             }
             rdev::EventType::Wheel { delta_x, delta_y } => {
-                //TODO: Wheel events get "stuck on" until a subsequent event
                 if delta_y != 0 {
                     if delta_y > 0 {
                         keys.write().unwrap().insert(String::from("mw_Up"));
@@ -39,12 +38,6 @@ pub fn start() {
                 }
             }
             _ => {}
-        }
-
-        if !matches!(event.event_type, rdev::EventType::Wheel { .. }) {
-            keys.write()
-                .unwrap()
-                .retain(|k| !k.starts_with("mw_"));
         }
     };
 
