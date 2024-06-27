@@ -1,4 +1,4 @@
-.key {
+.normal {
   display: flex;
   width: 1.5em;
   height: 1.5em;
@@ -8,11 +8,8 @@
   border-radius: 2px;
   align-items: center;
   place-content: center;
-  position: absolute;
-  left: var(--pos-x, 0);
-  right: var(--pos-y, 0);
 
-  &.pressed {
+  &[data-pressed] {
     background-color: royalblue;
   }
 }

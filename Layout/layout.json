@@ -1,0 +1,16 @@
+[
+  {
+    "label": "W",
+    "keys": "kb_KeyW",
+    "posX": 10,
+    "posY": 10,
+    "classes": "normal"
+  },
+  {
+    "label": "A",
+    "keys": ["kb_KeyA"],
+    "posX": 80,
+    "posY": 10,
+    "classes": "normal"
+  }
+]

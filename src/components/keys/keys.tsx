@@ -3,16 +3,22 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { useEffect, useState } from "react";
 
-import styles from "./styles.module.scss";
-import Key from "../key/key";
+import Key from "@/components/key/key";
+import { LayoutData } from "@/components/wrapper/wrapper";
 
-export default function Keys() {
-  const [keys, setKeys] = useState(new Set());
+import styles from "./styles.module.scss";
+
+interface props {
+  layout: LayoutData | undefined;
+}
+
+export default function Keys(props: props) {
+  const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const syncKeys = () => {
-      invoke<any[]>("keys").then((keys) => {
-        setKeys(new Set(keys));
+      invoke<string[]>("keys").then((keys) => {
+        setPressedKeys(new Set(keys));
         console.log(keys);
       });
     };
@@ -23,15 +29,23 @@ export default function Keys() {
   }, []);
   return (
     <div className={styles.keys}>
-      <Key label="W" isPressed={keys.has("kb_KeyW")} />
-      <Key label="A" isPressed={keys.has("kb_KeyA")} />
-      <Key label="S" isPressed={keys.has("kb_KeyS")} />
-      <Key label="D" isPressed={keys.has("kb_KeyD")} />
-      <Key
-        label="^"
-        isPressed={keys.has("mw_Up") || keys.has("ms_Unknown(2)")} // For when using stray macro
-      />
-      <Key label="L" isPressed={keys.has("ms_Left")} />
+      {Array.isArray(props.layout) &&
+        props.layout.map((key, index) => {
+          const isPressed =
+            typeof key.keys === "string"
+              ? pressedKeys.has(key.keys)
+              : key.keys.some((k) => pressedKeys.has(k));
+          console.log(`Key: ${key.label}, isPressed: ${isPressed}`);
+          return (
+            <Key
+              key={index}
+              label={key.label}
+              isPressed={isPressed}
+              posX={key.posX}
+              posY={key.posY}
+            />
+          );
+        })}
     </div>
   );
 }
