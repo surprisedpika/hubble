@@ -19,7 +19,9 @@ export default function Keys(props: props) {
     const syncKeys = () => {
       invoke<string[]>("keys").then((keys) => {
         setPressedKeys(new Set(keys));
-        console.log(keys);
+        if (keys.length > 0) {
+          console.log(keys);
+        }
       });
     };
 
@@ -35,7 +37,6 @@ export default function Keys(props: props) {
             typeof key.keys === "string"
               ? pressedKeys.has(key.keys)
               : key.keys.some((k) => pressedKeys.has(k));
-          console.log(`Key: ${key.label}, isPressed: ${isPressed}`);
           return (
             <Key
               key={index}
