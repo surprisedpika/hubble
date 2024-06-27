@@ -3,10 +3,10 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { useEffect, useState } from "react";
 
+import styles from "./styles.module.scss";
+
 import Key from "@/components/key/key";
 import { LayoutData } from "@/components/wrapper/wrapper";
-
-import styles from "./styles.module.scss";
 
 interface props {
   layout: LayoutData | undefined;
@@ -30,7 +30,7 @@ export default function Keys(props: props) {
     return () => clearInterval(syncClock);
   }, []);
   return (
-    <div className={styles.keys}>
+    <div className={`${styles.keys} global`}>
       {Array.isArray(props.layout) &&
         props.layout.map((key, index) => {
           const isPressed =

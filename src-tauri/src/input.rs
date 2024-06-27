@@ -4,6 +4,7 @@ use crate::get_keys;
 
 pub fn start() {
     let callback = move |event: Event| {
+        //TODO: Support controllers
         let keys = get_keys();
         match event.event_type {
             rdev::EventType::KeyPress(key) => {

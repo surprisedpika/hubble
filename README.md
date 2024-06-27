@@ -157,3 +157,5 @@ The location of this key on the screen
 A list of CSS classes applied to this key. The CSS classes are defined in the .css file.
 
 Additionally, each key is given a `.pressed` class when the key is pressed.
+
+The `.global` class can be used to style the div which wraps around all keys (for example, setting the background colour).
