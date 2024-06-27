@@ -1,18 +1,6 @@
 .key {
-  display: flex;
-  width: 1.5em;
-  height: 1.5em;
-  padding: 1em;
-  font-weight: bold;
-  outline: 1px solid #eee;
-  border-radius: 2px;
-  align-items: center;
-  place-content: center;
   position: absolute;
+  display: flex;
   left: var(--pos-x, 0);
-  right: var(--pos-y, 0);
-
-  &.pressed {
-    background-color: royalblue;
-  }
+  top: var(--pos-y, 0);
 }

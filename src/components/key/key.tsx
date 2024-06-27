@@ -12,7 +12,7 @@ interface props {
 
 export default function Key(props: props) {
   const getClasses = () =>
-  `${styles.key} ${props.isPressed ? styles.pressed : ""} ${typeof props.classes === "string" ? props.classes : props.classes.join(" ")}`;
+  `${styles.key} ${props.isPressed ? "pressed" : ""} ${typeof props.classes === "string" ? props.classes : props.classes.join(" ")}`;
   return (
     <p
       className={getClasses()}

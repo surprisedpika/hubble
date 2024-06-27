@@ -45,6 +45,7 @@ export default function Wrapper() {
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    //TODO user cancels file select
     const files = event.target.files;
     if (files === null) {
       return;
