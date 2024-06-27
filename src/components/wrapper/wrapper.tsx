@@ -1,7 +1,7 @@
 "use client";
 
 import Keys from "@/components/keys/keys";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 export type LayoutData = {
   label: string;
@@ -12,27 +12,46 @@ export type LayoutData = {
 }[];
 
 export default function Wrapper() {
-  const [layout, setLayout] = useState(JSON.parse("{}"));
+  const [layout, setLayout] = useState<LayoutData>(JSON.parse("{}"));
   const [style, setStyle] = useState<string>("");
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files === null) {
-      return;
+
+  useEffect(() => {
+    const jsonFile = localStorage.getItem("layoutJSONURI");
+    const cssFile = localStorage.getItem("layoutCSSURI");
+    if (jsonFile !== null) {
+      setLayout(JSON.parse(jsonFile));
     }
+    if (cssFile !== null) {
+      setStyle(cssFile);
+    }
+  }, []);
+
+  const readFile = (file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const res = e.target?.result;
       if (res === null || res === undefined || res instanceof ArrayBuffer) {
         return;
       }
-      if (files[0].name.endsWith(".json")) {
+      if (file.name.endsWith(".json")) {
+        localStorage.setItem("layoutJSONURI", res);
         setLayout(JSON.parse(res));
       } else {
+        localStorage.setItem("layoutCSSURI", res);
         setStyle(res);
       }
     };
-    reader.readAsText(files[0]);
+    reader.readAsText(file);
   };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files === null) {
+      return;
+    }
+    readFile(files[0]);
+  };
+
   return (
     <div>
       <style dangerouslySetInnerHTML={{ __html: style }} />
