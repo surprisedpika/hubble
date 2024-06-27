@@ -1,36 +1,159 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Hubble
 
-## Getting Started
+Hubble is an input viewer for Windows, MacOS, and Linux (probably).
 
-First, run the development server:
+## Layouts
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Layouts are stored in a .json file and .css file. The JSON file is an array of keys, where each key is defined as:
+
+```json
+{
+  "label": string,
+  "keys": string or string[],
+  "posX": number,
+  "posY": number,
+  "classes": string or string[]
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Label
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The inner text of the given key.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Keys
 
-## Learn More
+The key or key that must be pressed to mark this key as pressed.
 
-To learn more about Next.js, take a look at the following resources:
+There are 3 types of key:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Mouse Wheel events, prefixed by `mw`
+- Mouse Button events, prefixed by `ms`
+- Keyboard events, prefixed by `kb`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+| Key Code         | Explanation                                   |
+| ---------------- | --------------------------------------------- |
+| mw_Up            |                                               |
+| mw_Down          |                                               |
+| mw_Left          | Scrolling left (only supported by some mice)  |
+| mw_Right         | Scrolling right (only supported by some mice) |
+| mw_Unknown(`x`)  | Unknown scroll event (`x` is a u8)            |
+| ms_Left          |                                               |
+| ms_Middle        |                                               |
+| ms_Right         |                                               |
+| ms_Unknown(`x`)  | Unknown click event (`x` is a u8)             |
+| kb_Alt           | Alt on Linux and Windows, Option on MacOS     |
+| kb_AltGr         |                                               |
+| kb_Backspace     |                                               |
+| kb_CapsLock      |                                               |
+| kb_ControlLeft   |                                               |
+| kb_ControlRight  |                                               |
+| kb_Delete        |                                               |
+| kb_DownArrow     |                                               |
+| kb_End           |                                               |
+| kb_Escape        |                                               |
+| kb_F1            |                                               |
+| kb_F2            |                                               |
+| kb_F3            |                                               |
+| kb_F4            |                                               |
+| kb_F5            |                                               |
+| kb_F6            |                                               |
+| kb_F7            |                                               |
+| kb_F8            |                                               |
+| kb_F9            |                                               |
+| kb_F10           |                                               |
+| kb_F11           |                                               |
+| kb_F12           |                                               |
+| kb_Home          |                                               |
+| kb_LeftArrow     |                                               |
+| kb_MetaLeft      | "Windows", "Super" or "Command" Left          |
+| kb_MetaRight     | "Windows", "Super" or "Command" Right         |
+| kb_PageDown      |                                               |
+| kb_PageUp        |                                               |
+| kb_Return        |                                               |
+| kb_RightArrow    |                                               |
+| kb_ShiftLeft     |                                               |
+| kb_ShiftRight    |                                               |
+| kb_Space         |                                               |
+| kb_Tab           |                                               |
+| kb_UpArrow       |                                               |
+| kb_PrintScreen   |                                               |
+| kb_ScrollLock    |                                               |
+| kb_Pause         |                                               |
+| kb_NumLock       |                                               |
+| kb_BackQuote     |                                               |
+| kb_Num1          |                                               |
+| kb_Num2          |                                               |
+| kb_Num3          |                                               |
+| kb_Num4          |                                               |
+| kb_Num5          |                                               |
+| kb_Num6          |                                               |
+| kb_Num7          |                                               |
+| kb_Num8          |                                               |
+| kb_Num9          |                                               |
+| kb_Num0          |                                               |
+| kb_Minus         |                                               |
+| kb_Equal         |                                               |
+| kb_KeyQ          |                                               |
+| kb_KeyW          |                                               |
+| kb_KeyE          |                                               |
+| kb_KeyR          |                                               |
+| kb_KeyT          |                                               |
+| kb_KeyY          |                                               |
+| kb_KeyU          |                                               |
+| kb_KeyI          |                                               |
+| kb_KeyO          |                                               |
+| kb_KeyP          |                                               |
+| kb_LeftBracket   |                                               |
+| kb_RightBracket  |                                               |
+| kb_KeyA          |                                               |
+| kb_KeyS          |                                               |
+| kb_KeyD          |                                               |
+| kb_KeyF          |                                               |
+| kb_KeyG          |                                               |
+| kb_KeyH          |                                               |
+| kb_KeyJ          |                                               |
+| kb_KeyK          |                                               |
+| kb_KeyL          |                                               |
+| kb_SemiColon     |                                               |
+| kb_Quote         |                                               |
+| kb_BackSlash     |                                               |
+| kb_IntlBackslash |                                               |
+| kb_KeyZ          |                                               |
+| kb_KeyX          |                                               |
+| kb_KeyC          |                                               |
+| kb_KeyV          |                                               |
+| kb_KeyB          |                                               |
+| kb_KeyN          |                                               |
+| kb_KeyM          |                                               |
+| kb_Comma         |                                               |
+| kb_Dot           |                                               |
+| kb_Slash         |                                               |
+| kb_Insert        |                                               |
+| kb_KpReturn      |                                               |
+| kb_KpMinus       |                                               |
+| kb_KpPlus        |                                               |
+| kb_KpMultiply    |                                               |
+| kb_KpDivide      |                                               |
+| kb_Kp0           |                                               |
+| kb_Kp1           |                                               |
+| kb_Kp2           |                                               |
+| kb_Kp3           |                                               |
+| kb_Kp4           |                                               |
+| kb_Kp5           |                                               |
+| kb_Kp6           |                                               |
+| kb_Kp7           |                                               |
+| kb_Kp8           |                                               |
+| kb_Kp9           |                                               |
+| kb_KpDelete      |                                               |
+| kb_Function      |                                               |
+| kb_Unknown(`x`)  | Unknown keyboard event (`x` is a u32)         |
 
-## Deploy on Vercel
+### PosX and PosY
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The location of this key on the screen
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Classes
+
+A list of CSS classes applied to this key. The CSS classes are defined in the .css file.
+
+Additionally, each key is given a `.pressed` class when the key is pressed.

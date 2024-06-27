@@ -41,6 +41,7 @@ export default function Keys(props: props) {
               key={index}
               label={key.label}
               isPressed={isPressed}
+              classes={key.classes}
               posX={key.posX}
               posY={key.posY}
             />
