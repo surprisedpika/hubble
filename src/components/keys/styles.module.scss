@@ -2,3 +2,15 @@
   position: absolute;
   inset: 0;
 }
+
+.warning {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 1em;
+  margin: 0;
+  background-color: red;
+  font-weight: bold;
+  border-top-right-radius: 1em;
+  font-size: 0.8rem;
+}
