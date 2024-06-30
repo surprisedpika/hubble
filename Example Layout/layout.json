@@ -1,0 +1,26 @@
+{
+  "warnUnknown": true,
+  "keys": [
+    {
+      "label": "W",
+      "keys": "kb_KeyW",
+      "posX": 10,
+      "posY": 10,
+      "classes": "normal"
+    },
+    {
+      "label": "A",
+      "keys": "kb_KeyA",
+      "posX": 80,
+      "posY": 10,
+      "classes": "normal"
+    },
+    {
+      "label": "S",
+      "keys": "kb_KeyS",
+      "posX": 150,
+      "posY": 10,
+      "classes": "normal"
+    }
+  ]
+}
