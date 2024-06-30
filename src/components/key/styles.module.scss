@@ -1,6 +1,7 @@
 .key {
   position: absolute;
   display: flex;
+  margin: 0;
   left: var(--pos-x, 0);
   top: var(--pos-y, 0);
 }

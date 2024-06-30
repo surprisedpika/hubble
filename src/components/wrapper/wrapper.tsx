@@ -1,7 +1,10 @@
 "use client";
 
 import Keys from "@/components/keys/keys";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { invoke } from "@tauri-apps/api";
+
+import styles from "./styles.module.scss";
 
 export type LayoutData = {
   label: string;
@@ -16,48 +19,37 @@ export default function Wrapper() {
   const [style, setStyle] = useState<string>("");
 
   useEffect(() => {
-    const jsonFile = localStorage.getItem("layoutJSONURI");
-    const cssFile = localStorage.getItem("layoutCSSURI");
-    if (jsonFile !== null) {
-      setLayout(JSON.parse(jsonFile));
-    }
-    if (cssFile !== null) {
+    const jsonFile = localStorage.getItem("layoutJSON");
+    const cssFile = localStorage.getItem("layoutCSS");
+    if (jsonFile !== null && cssFile !== null) {
+      setLayout(JSON.parse(jsonFile) as LayoutData);
       setStyle(cssFile);
-    }
-  }, []);
-
-  const readFile = (file: File) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const res = e.target?.result;
-      if (res === null || res === undefined || res instanceof ArrayBuffer) {
-        return;
-      }
-      if (file.name.endsWith(".json")) {
-        localStorage.setItem("layoutJSONURI", res);
-        setLayout(JSON.parse(res));
-      } else {
-        localStorage.setItem("layoutCSSURI", res);
-        setStyle(res);
-      }
-    };
-    reader.readAsText(file);
-  };
-
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files === null) {
       return;
     }
-    readFile(files[0]);
+    getLayout();
+  }, []);
+
+  const getLayout = async () => {
+    invoke<[string, string]>("get_layout")
+      .then(res => {
+        if (res === null) {
+          console.error("Theme could not be read!");
+          return;
+        }
+        const [json, css] = res;
+        localStorage.setItem("layoutJSON", json);
+        localStorage.setItem("layoutCSS", css);
+        setLayout(JSON.parse(json));
+        setStyle(css);
+      })
+      .catch(console.error);
   };
 
   return (
     <div>
       <style dangerouslySetInnerHTML={{ __html: style }} />
-      <input type="file" accept=".css" onChange={handleFileChange} />
-      <input type="file" accept=".json" onChange={handleFileChange} />
       {layout && style && <Keys layout={layout} />}
+      <button onClick={getLayout} className={styles.button}>Change Layout</button>
     </div>
   );
 }

@@ -1,7 +1,9 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+use std::fs;
 use std::sync::{ Arc, OnceLock, RwLock };
 use std::collections::HashSet;
+use tauri::api::dialog::blocking::FileDialogBuilder;
 
 mod input;
 
@@ -16,7 +18,7 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![keys])
+        .invoke_handler(tauri::generate_handler![keys, get_layout])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -38,4 +40,28 @@ fn keys() -> Vec<String> {
         .unwrap()
         .retain(|k| !k.starts_with("mw_"));
     return keys;
+}
+
+#[tauri::command]
+async fn get_layout() -> Option<(String, String)> {
+    let mut json_data: Option<String> = None;
+    let mut css_data: Option<String> = None;
+    let path = FileDialogBuilder::new().pick_folder()?;
+    let dir = fs::read_dir(path).ok()?;
+    for entry in dir {
+        let entry = entry.ok()?;
+        if entry.file_name() == "layout.json" {
+            json_data = Some(fs::read_to_string(entry.path()).ok()?);
+            continue;
+        }
+        if entry.file_name() == "layout.css" {
+            css_data = Some(fs::read_to_string(entry.path()).ok()?);
+            continue;
+        }
+    }
+
+    if let (Some(json), Some(css)) = (json_data, css_data) {
+        return Some((json, css));
+    }
+    return None;
 }
