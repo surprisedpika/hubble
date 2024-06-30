@@ -45,7 +45,6 @@ There are 3 types of key:
 | mw_Down          |                                               |
 | mw_Left          | Scrolling left (only supported by some mice)  |
 | mw_Right         | Scrolling right (only supported by some mice) |
-| mw_Unknown(`x`)  | Unknown scroll event (`x` is a u8)            |
 | ms_Left          |                                               |
 | ms_Middle        |                                               |
 | ms_Right         |                                               |
