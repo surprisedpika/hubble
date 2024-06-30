@@ -1,6 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use std::fs;
+use std::path::PathBuf;
 use std::sync::{ Arc, OnceLock, RwLock };
 use std::collections::HashSet;
 use tauri::api::dialog::blocking::FileDialogBuilder;
@@ -43,11 +44,17 @@ fn keys() -> Vec<String> {
 }
 
 #[tauri::command]
-async fn get_layout() -> Option<(String, String)> {
+async fn get_layout(previous_path: Option<String>) -> Option<(String, String, String)> {
+    println!("{:?}", previous_path);
     let mut json_data: Option<String> = None;
     let mut css_data: Option<String> = None;
-    let path = FileDialogBuilder::new().pick_folder()?;
-    let dir = fs::read_dir(path).ok()?;
+    let path: PathBuf;
+    if let Some(previous) = previous_path {
+        path = PathBuf::from(previous);
+    } else {
+        path = FileDialogBuilder::new().pick_folder()?;
+    }
+    let dir = fs::read_dir(path.clone()).ok()?;
     for entry in dir {
         let entry = entry.ok()?;
         if entry.file_name() == "layout.json" {
@@ -61,7 +68,8 @@ async fn get_layout() -> Option<(String, String)> {
     }
 
     if let (Some(json), Some(css)) = (json_data, css_data) {
-        return Some((json, css));
+        let path_str = path.to_str()?.to_string();
+        return Some((json, css, path_str));
     }
     return None;
 }

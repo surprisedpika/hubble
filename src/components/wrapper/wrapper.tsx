@@ -1,7 +1,7 @@
 "use client";
 
 import Keys from "@/components/keys/keys";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api";
 
 import styles from "./styles.module.scss";
@@ -14,31 +14,30 @@ export type LayoutData = {
   classes: string | string[];
 }[];
 
+const LAYOUT_PATH = "layoutPath";
+
 export default function Wrapper() {
   const [layout, setLayout] = useState<LayoutData>(JSON.parse("{}"));
   const [style, setStyle] = useState<string>("");
+  const hasInit = useRef(false);
 
+  // Run on mount
   useEffect(() => {
-    const jsonFile = localStorage.getItem("layoutJSON");
-    const cssFile = localStorage.getItem("layoutCSS");
-    if (jsonFile !== null && cssFile !== null) {
-      setLayout(JSON.parse(jsonFile) as LayoutData);
-      setStyle(cssFile);
-      return;
-    }
-    getLayout();
+    if (hasInit.current) return;
+    hasInit.current = true;
+    const path = localStorage.getItem(LAYOUT_PATH);
+    getLayout(path ?? undefined);
   }, []);
 
-  const getLayout = async () => {
-    invoke<[string, string]>("get_layout")
+  const getLayout = async (path?: string) => {
+    invoke<[string, string, string]>("get_layout", {"previousPath": path})
       .then(res => {
         if (res === null) {
           console.error("Theme could not be read!");
           return;
         }
-        const [json, css] = res;
-        localStorage.setItem("layoutJSON", json);
-        localStorage.setItem("layoutCSS", css);
+        const [json, css, path] = res;
+        localStorage.setItem(LAYOUT_PATH, path);
         setLayout(JSON.parse(json));
         setStyle(css);
       })
@@ -49,7 +48,7 @@ export default function Wrapper() {
     <div>
       <style dangerouslySetInnerHTML={{ __html: style }} />
       {layout && style && <Keys layout={layout} />}
-      <button onClick={getLayout} className={styles.button}>Change Layout</button>
+      <button onClick={() => getLayout()} className={styles.button}>Change Layout</button>
     </div>
   );
 }

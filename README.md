@@ -158,4 +158,8 @@ A list of CSS classes applied to this key. The CSS classes are defined in the .c
 
 Additionally, each key is given a `.pressed` class when the key is pressed.
 
+## Styling
+
 The `.global` class can be used to style the div which wraps around all keys (for example, setting the background colour).
+
+If you wish to use any external files in the styling, those files must either be uploaded to the internet, or converted to use the [data URI scheme](https://en.wikipedia.org/wiki/Data_URI_scheme).
