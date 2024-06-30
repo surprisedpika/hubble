@@ -6,13 +6,16 @@ import { invoke } from "@tauri-apps/api";
 
 import styles from "./styles.module.scss";
 
-export type LayoutData = {
-  label: string;
-  keys: string | string[];
-  posX: number;
-  posY: number;
-  classes: string | string[];
-}[];
+export interface LayoutData {
+  warnUnknown?: boolean,
+  keys: {
+    label: string;
+    keys: string | string[];
+    posX: number;
+    posY: number;
+    classes: string | string[];
+  }[]
+}
 
 const LAYOUT_PATH = "layoutPath";
 

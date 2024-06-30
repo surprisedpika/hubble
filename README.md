@@ -4,17 +4,24 @@ Hubble is an input viewer for Windows, MacOS, and Linux (probably).
 
 ## Layouts
 
-Layouts are stored in a .json file and .css file. The JSON file is an array of keys, where each key is defined as:
+Layouts are stored in a .json file and .css file. The JSON has two properties, warnUnknown and keys.
 
 ```ts
 {
-  "label": string,
-  "keys": string or string[],
-  "posX": number,
-  "posY": number,
-  "classes": string or string[]
+  "warnUnknown"?: boolean,
+  keys: {
+    "label": string,
+    "keys": string or string[],
+    "posX": number,
+    "posY": number,
+    "classes": string or string[]
+  }[]
 }
 ```
+
+### Warn Unknown
+
+Defaults to true. When unknown keys are encountered, show a popup.
 
 ### Label
 

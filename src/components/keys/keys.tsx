@@ -42,8 +42,8 @@ export default function Keys(props: props) {
   }, []);
   return (
     <div className={`${styles.keys} global`}>
-      {Array.isArray(props.layout) &&
-        props.layout.map((key, index) => {
+      {Array.isArray(props.layout?.keys) &&
+        props.layout.keys.map((key, index) => {
           const isPressed =
             typeof key.keys === "string"
               ? pressedKeys.has(key.keys)
@@ -59,7 +59,7 @@ export default function Keys(props: props) {
             />
           );
         })}
-        {unknownKey && <p className={styles.warning}>Unknown Key: <code>{unknownKey}</code></p>}
+        {(props.layout?.warnUnknown ?? true) && unknownKey && <p className={styles.warning}>Unknown Key: <code>{unknownKey}</code></p>}
     </div>
   );
 }
