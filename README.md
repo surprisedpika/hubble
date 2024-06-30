@@ -1,3 +1,5 @@
+![Hubble Banner]("./.github/assets/hubble.png")
+
 # Hubble
 
 Hubble is an input viewer for Windows, MacOS, and Linux (probably).
@@ -9,7 +11,7 @@ Layouts are stored in a .json file and .css file. The JSON has two properties, w
 ```ts
 {
   "warnUnknown"?: boolean,
-  keys: {
+  "keys": {
     "label": string,
     "keys": string or string[],
     "posX": number,
