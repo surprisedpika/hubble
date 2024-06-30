@@ -23,7 +23,7 @@ Layouts are stored in a .json file and .css file. The JSON has two properties, w
 
 ### Warn Unknown
 
-Defaults to true. When unknown keys are encountered, show a popup.
+Defaults to true. When keys unknown to the program are encountered, show a popup.
 
 ### Label
 
