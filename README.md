@@ -1,4 +1,4 @@
-![Hubble Banner]("https://github.com/surprisedpika/hubble/blob/master/hubble.png?raw=true")
+![Hubble Banner]("https://github.com/surprisedpika/hubble/raw/master/hubble.png")
 
 # Hubble
 
