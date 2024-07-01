@@ -6,7 +6,7 @@ Hubble is an input viewer for Windows, MacOS, and Linux (probably).
 
 ## Layouts
 
-Layouts are stored in a .json file and .css file. The JSON has two properties, warnUnknown and keys.
+Layouts are stored in a `layout.json` file and `layout.css` file. The JSON has two properties, warnUnknown and keys.
 
 ```ts
 {
@@ -45,6 +45,7 @@ There are 3 types of key:
 | mw_Down          |                                               |
 | mw_Left          | Scrolling left (only supported by some mice)  |
 | mw_Right         | Scrolling right (only supported by some mice) |
+| mw_Unknown       | Unknown wheel event                           |
 | ms_Left          |                                               |
 | ms_Middle        |                                               |
 | ms_Right         |                                               |
@@ -162,7 +163,7 @@ The location of this key on the screen
 
 ### Classes
 
-A list of CSS classes applied to this key. The CSS classes are defined in the .css file.
+A list of CSS classes applied to this key. The CSS classes are defined in the `layout.css` file.
 
 Additionally, each key is given a `.pressed` class when the key is pressed.
 
@@ -171,3 +172,7 @@ Additionally, each key is given a `.pressed` class when the key is pressed.
 The `.global` class can be used to style the div which wraps around all keys (for example, setting the background colour).
 
 If you wish to use any external files in the styling, those files must either be uploaded to the internet, or converted to use the [data URI scheme](https://en.wikipedia.org/wiki/Data_URI_scheme).
+
+## Using Hubble
+
+Download Hubble from the releases page and open it. You will be prompted to select a folder, this is the layouts folder containing a `layout.css` and `layout.json` file. If you wish to work from an example, there is one in the [Example Layout](https://github.com/surprisedpika/hubble/tree/master/Example%20Layout) folder in the repository.

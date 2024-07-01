@@ -37,6 +37,7 @@ pub fn start() {
                         return;
                     }
                 }
+                keys.write().unwrap().insert(String::from("mw_Unknown"));
             }
             _ => {}
         }
