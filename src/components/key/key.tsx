@@ -3,23 +3,29 @@
 import styles from "./styles.module.scss";
 
 interface props {
-  label: string;
-  isPressed: boolean;
-  posX: number;
-  posY: number;
-  classes: string | string[];
+  label: string | null;
+  isPressed: boolean | null;
+  posX: number | null;
+  posY: number | null;
+  classes: string | string[] | null;
 }
 
 export default function Key(props: props) {
   const getClasses = () =>
-  `${styles.key} ${props.isPressed ? "pressed" : ""} ${typeof props.classes === "string" ? props.classes : props.classes.join(" ")}`;
+    `${styles.key} ${props.isPressed ? "pressed" : ""} ${
+      typeof props.classes === "string"
+        ? props.classes
+        : Array.isArray(props.classes)
+        ? props.classes.join(" ")
+        : ""
+    }`;
   return (
     <p
       className={getClasses()}
       style={
         {
-          "--pos-x": `${props.posX}px`,
-          "--pos-y": `${props.posY}px`,
+          "--pos-x": `${props.posX ? props.posX : 0}px`,
+          "--pos-y": `${props.posY ? props.posY : 0}px`,
         } as React.CSSProperties
       }
     >

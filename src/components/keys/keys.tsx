@@ -10,7 +10,7 @@ import { LayoutData } from "@/components/wrapper/wrapper";
 import { listen } from "@tauri-apps/api/event";
 
 interface props {
-  layout: LayoutData | undefined;
+  layout: LayoutData | null;
 }
 
 export default function Keys(props: props) {

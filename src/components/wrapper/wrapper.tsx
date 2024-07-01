@@ -8,7 +8,7 @@ import styles from "./styles.module.scss";
 
 export interface LayoutData {
   warnUnknown?: boolean,
-  keys: {
+  keys?: {
     label: string;
     keys: string | string[];
     posX: number;
@@ -20,7 +20,7 @@ export interface LayoutData {
 const LAYOUT_PATH = "layoutPath";
 
 export default function Wrapper() {
-  const [layout, setLayout] = useState<LayoutData>(JSON.parse("{}"));
+  const [layout, setLayout] = useState<LayoutData | null>(null);
   const [style, setStyle] = useState<string>("");
   const hasInit = useRef(false);
 
