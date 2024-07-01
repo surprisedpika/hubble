@@ -2,19 +2,19 @@
 
 import Keys from "@/components/keys/keys";
 import { useEffect, useRef, useState } from "react";
-import { invoke } from "@tauri-apps/api";
+import { invoke } from "@tauri-apps/api/tauri";
 
 import styles from "./styles.module.scss";
 
 export interface LayoutData {
-  warnUnknown?: boolean,
+  warnUnknown?: boolean;
   keys?: {
     label: string;
     keys: string | string[];
     posX: number;
     posY: number;
     classes: string | string[];
-  }[]
+  }[];
 }
 
 const LAYOUT_PATH = "layoutPath";
@@ -33,8 +33,10 @@ export default function Wrapper() {
   }, []);
 
   const getLayout = async (path?: string) => {
-    invoke<[string, string, string]>("get_layout", {"previousPath": path})
-      .then(res => {
+    await invoke<[string, string, string] | null>("get_layout", {
+      previousPath: path,
+    })
+      .then((res) => {
         if (res === null) {
           console.error("Theme could not be read!");
           return;
@@ -51,7 +53,9 @@ export default function Wrapper() {
     <div>
       <style dangerouslySetInnerHTML={{ __html: style }} />
       {layout && style && <Keys layout={layout} />}
-      <button onClick={() => getLayout()} className={styles.button}>Change Layout</button>
+      <button onClick={() => getLayout()} className={styles.button}>
+        Change Layout
+      </button>
     </div>
   );
 }

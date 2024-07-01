@@ -19,16 +19,17 @@ export default function Keys(props: props) {
 
   useEffect(() => {
     const syncKeys = () => {
-      invoke<string[]>("keys").then((keys) => {
+      invoke<string[] | null>("keys").then((keys) => {
+        if (!Array.isArray(keys)) {
+          setPressedKeys(new Set());
+          return;
+        }
         keys.forEach(key => {
-          if (key.includes("Unknown")) {
+          if (key && typeof key === "string" && key.includes("Unknown")) {
             setUnknownKey(key);
           }
         })
         setPressedKeys(new Set(keys));
-        if (keys.length > 0) {
-          console.log(keys);
-        }
       });
     };
 
