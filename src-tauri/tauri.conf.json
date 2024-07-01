@@ -32,8 +32,8 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
-      "longDescription": "",
+      "identifier": "com.hubble",
+      "longDescription": "Hubble is an input viewer for Windows, MacOS, and Linux (probably).",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
