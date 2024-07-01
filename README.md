@@ -167,6 +167,19 @@ A list of CSS classes applied to this key. The CSS classes are defined in the `l
 
 Additionally, each key is given a `.pressed` class when the key is pressed.
 
+The default styles for a key are as follows:
+```css
+.key {
+  position: absolute;
+  display: flex;
+  margin: 0;
+  left: var(--pos-x, 0);
+  top: var(--pos-y, 0);
+}
+```
+
+There are no additional default styles for a pressed key.
+
 ## Styling
 
 The `.global` class can be used to style the div which wraps around all keys (for example, setting the background colour).
