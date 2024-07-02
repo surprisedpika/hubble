@@ -168,6 +168,7 @@ A list of CSS classes applied to this key. The CSS classes are defined in the `l
 Additionally, each key is given a `.pressed` class when the key is pressed.
 
 The default styles for a key are as follows:
+
 ```css
 .key {
   position: absolute;
@@ -188,4 +189,4 @@ If you wish to use any external files in the styling, those files must either be
 
 ## Using Hubble
 
-Download Hubble from the releases page and open it. You will be prompted to select a folder, this is the layouts folder containing a `layout.css` and `layout.json` file. If you wish to work from an example, there is one in the [Example Layout](https://github.com/surprisedpika/hubble/tree/master/Example%20Layout) folder in the repository.
+Download Hubble from the releases page and open it. You will be prompted to select a folder, this is the layouts folder containing a `layout.css` and `layout.json` file. If you wish to work from an example, there is one in the [Example Layout](https://github.com/surprisedpika/hubble/tree/master/Example%20Layouts) folder in the repository.

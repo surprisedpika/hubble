@@ -1,0 +1,71 @@
+.normal {
+  --color: lime;
+  font-family: sans-serif;
+  width: 1.5em;
+  height: 1.5em;
+  padding: 1.2em;
+  font-weight: bold;
+  align-items: center;
+  place-content: center;
+  transform-style: preserve-3d;
+  transform: rotateY(30deg) rotateX(45deg) translateZ(var(--extra-offset));
+  position: absolute;
+  outline: 3px solid var(--color);
+  outline-offset: -3px;
+}
+
+.normal, .normal::before, .normal::after {
+  background-color: #111;
+  transition: all 100ms ease;
+}
+
+.normal::after,
+.normal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 3px solid var(--color);
+}
+
+.normal::after {
+  transform: rotateX(90deg);
+  transform-origin: bottom;
+}
+
+.normal::before {
+  transform: rotateY(90deg);
+  transform-origin: left;
+}
+
+.pressed {
+  transform: rotateY(30deg) rotateX(45deg) translateZ(calc(var(--extra-offset) - 1em));
+  --color: red;
+}
+
+.pressed::after {
+  top: 1em;
+}
+
+.pressed::before {
+  right: 1em;
+}
+
+.normal:nth-child(3n - 2) {
+  z-index: 100;
+}
+
+.normal:nth-child(3n - 1) {
+  z-index: 50;
+}
+
+.normal:nth-child(n + 1):nth-child(-n + 3) {
+  --extra-offset: 0em;
+}
+
+.normal:nth-child(n + 4):nth-child(-n + 6) {
+  --extra-offset: 4em;
+}
+
+.normal:nth-child(n + 7):nth-child(-n + 9) {
+  --extra-offset: 8em;
+}

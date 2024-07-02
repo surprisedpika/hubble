@@ -4,22 +4,29 @@
     {
       "label": "W",
       "keys": "kb_KeyW",
-      "posX": 10,
-      "posY": 10,
+      "posX": 380,
+      "posY": 210,
       "classes": "normal"
     },
     {
       "label": "A",
       "keys": "kb_KeyA",
-      "posX": 80,
-      "posY": 10,
+      "posX": 310,
+      "posY": 290,
+      "classes": "normal"
+    },
+    {
+      "label": "D",
+      "keys": "kb_KeyD",
+      "posX": 450,
+      "posY": 290,
       "classes": "normal"
     },
     {
       "label": "S",
       "keys": "kb_KeyS",
-      "posX": 150,
-      "posY": 10,
+      "posX": 380,
+      "posY": 290,
       "classes": "normal"
     }
   ]
