@@ -99,7 +99,7 @@ export default function Keys(props: props) {
     const keyupCallback = (e: KeyboardEvent) => {
       const k = convertKey(e.code);
       if (globalPressedKeys.has(k)) {
-        //TODO: Key started to be held globally but was released locally, causing it to be stuck down
+        invoke<undefined>("unstick_key", { key: k });
       }
       setLocalPressedKeys((before) => {
         before.delete(k);

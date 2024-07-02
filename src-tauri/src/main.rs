@@ -19,7 +19,7 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![keys, get_layout])
+        .invoke_handler(tauri::generate_handler![keys, get_layout, unstick_key])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -41,6 +41,12 @@ fn keys() -> Vec<String> {
         .unwrap()
         .retain(|k| !k.starts_with("mw_"));
     return keys;
+}
+
+#[tauri::command]
+async fn unstick_key(key: String) {
+    let keys = get_keys();
+    keys.write().unwrap().remove(&key);
 }
 
 #[tauri::command]
