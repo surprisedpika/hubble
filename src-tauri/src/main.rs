@@ -18,6 +18,9 @@ fn main() {
             std::thread::spawn(move || {
                 kbm::start();
             });
+            std::thread::spawn(move || {
+                controller::start();
+            });
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![keys, get_layout, unstick_key])
@@ -52,7 +55,6 @@ async fn unstick_key(key: String) {
 
 #[tauri::command]
 async fn get_layout(previous_path: Option<String>) -> Option<(String, String, String)> {
-    println!("{:?}", previous_path);
     let mut json_data: Option<String> = None;
     let mut css_data: Option<String> = None;
     let path: PathBuf;
