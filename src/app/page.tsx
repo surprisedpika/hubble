@@ -2,6 +2,6 @@
 
 import Wrapper from "@/components/wrapper/wrapper";
 
-export default function page() {
+export default function Page() {
   return <Wrapper />
 }

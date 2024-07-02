@@ -13,42 +13,119 @@ interface props {
   layout: LayoutData | null;
 }
 
+function convertKey(key: string): string {
+  if (key.startsWith("Arrow")) {
+    return key.replace("Arrow", "kb_").concat("Arrow");
+  }
+  if (key === "Period") {
+    return "kb_Dot";
+  }
+  if (key.startsWith("Digit")) {
+    return key.replace("Digit", "kb_Num");
+  }
+  if (key.startsWith("Alt")) {
+    return "kb_Alt";
+  }
+  if (key.startsWith("Bracket")) {
+    return key.replace("Bracket", "kb_").concat("Bracket");
+  }
+  if (key === "Backquote") {
+    return "kb_BackQuote";
+  }
+  if (key === "Semicolon") {
+    return "kb_SemiColon";
+  }
+  if (key.includes("Enter")) {
+    if (key.length === 11) {
+      // NumpadEnter
+      return "kb_KpReturn";
+    }
+    // Enter
+    return "kb_Return";
+  }
+  if (key.startsWith("Numpad")) {
+    if (key.endsWith("Minus")) {
+      return "kb_KpSubtract";
+    }
+    if (key.endsWith("Add")) {
+      return "kb_KpPlus";
+    }
+    return key.replace("Numpad", "kb_Kp");
+  }
+  return "kb_".concat(key);
+}
+
 export default function Keys(props: props) {
-  const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
+  const [globalPressedKeys, setGlobalPressedKeys] = useState<Set<string>>(
+    new Set()
+  );
+  const [localPressedKeys, setLocalPressedKeys] = useState<Set<string>>(
+    new Set()
+  );
   const [unknownKey, setUnknownKey] = useState("");
 
   useEffect(() => {
     const syncKeys = () => {
       invoke<string[] | null>("keys").then((keys) => {
         if (!Array.isArray(keys)) {
-          setPressedKeys(new Set());
+          setGlobalPressedKeys(new Set());
           return;
         }
-        keys.forEach(key => {
+        keys.forEach((key) => {
           if (key && typeof key === "string" && key.includes("Unknown")) {
             setUnknownKey(key);
           }
-        })
-        setPressedKeys(new Set(keys));
+          if (localPressedKeys.has(key)) {
+            setLocalPressedKeys((before) => {
+              before.delete(key);
+              return before;
+            });
+          }
+        });
+        setGlobalPressedKeys(new Set(keys));
       });
     };
 
-    listen<string>('unknownKey', (payload) => {
+    listen<string>("unknownKey", (payload) => {
       setUnknownKey(payload.payload);
     });
 
     const syncClock = setInterval(syncKeys, 50);
 
-    return () => clearInterval(syncClock);
-  }, []);
+    const keydownCallback = (e: KeyboardEvent) => {
+      const k = convertKey(e.code);
+      setLocalPressedKeys((before) => before.add(k));
+    };
+    const keyupCallback = (e: KeyboardEvent) => {
+      const k = convertKey(e.code);
+      if (globalPressedKeys.has(k)) {
+        //TODO: Key started to be held globally but was released locally, causing it to be stuck down
+      }
+      setLocalPressedKeys((before) => {
+        before.delete(k);
+        return before;
+      });
+    };
+
+    document.addEventListener("keydown", keydownCallback);
+    document.addEventListener("keyup", keyupCallback);
+
+    // On unmount
+    return () => {
+      clearInterval(syncClock);
+      document.removeEventListener("keydown", keydownCallback);
+      document.removeEventListener("keyup", keyupCallback);
+    };
+  }, [globalPressedKeys, localPressedKeys]);
   return (
     <div className={`${styles.keys} global`}>
       {Array.isArray(props.layout?.keys) &&
         props.layout.keys.map((key, index) => {
           const isPressed =
             typeof key.keys === "string"
-              ? pressedKeys.has(key.keys)
-              : key.keys.some((k) => pressedKeys.has(k));
+              ? globalPressedKeys.has(key.keys) ||
+                localPressedKeys.has(key.keys)
+              : key.keys.some((k) => globalPressedKeys.has(k));
           return (
             <Key
               key={index}
@@ -60,7 +137,11 @@ export default function Keys(props: props) {
             />
           );
         })}
-        {(props.layout?.warnUnknown ?? true) && unknownKey && <p className={styles.warning}>Unknown Key: <code>{unknownKey}</code></p>}
+      {(props.layout?.warnUnknown ?? true) && unknownKey && (
+        <p className={styles.warning}>
+          Unknown Key: <code>{unknownKey}</code>
+        </p>
+      )}
     </div>
   );
 }

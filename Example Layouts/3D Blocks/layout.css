@@ -1,5 +1,6 @@
 .normal {
   --color: lime;
+  --pressed-offset: 1.5em;
   font-family: sans-serif;
   width: 1.5em;
   height: 1.5em;
@@ -8,7 +9,7 @@
   align-items: center;
   place-content: center;
   transform-style: preserve-3d;
-  transform: rotateY(30deg) rotateX(45deg) translateZ(var(--extra-offset));
+  transform: rotateY(30deg) rotateX(45deg) translateZ(var(--extra-offset, 0em));
   position: absolute;
   outline: 3px solid var(--color);
   outline-offset: -3px;
@@ -38,16 +39,16 @@
 }
 
 .pressed {
-  transform: rotateY(30deg) rotateX(45deg) translateZ(calc(var(--extra-offset) - 1em));
+  transform: rotateY(30deg) rotateX(45deg) translateZ(calc(var(--extra-offset, 0em) - var(--pressed-offset, 0em)));
   --color: red;
 }
 
 .pressed::after {
-  top: 1em;
+  top: var(--pressed-offset, 0em);
 }
 
 .pressed::before {
-  right: 1em;
+  right: var(--pressed-offset, 0em);
 }
 
 .normal:nth-child(3n - 2) {
@@ -56,10 +57,6 @@
 
 .normal:nth-child(3n - 1) {
   z-index: 50;
-}
-
-.normal:nth-child(n + 1):nth-child(-n + 3) {
-  --extra-offset: 0em;
 }
 
 .normal:nth-child(n + 4):nth-child(-n + 6) {
