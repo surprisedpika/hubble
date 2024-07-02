@@ -9,6 +9,7 @@ Hubble is an input viewer for Windows, MacOS, and Linux (probably).
 Layouts are stored in a `layout.json` file and `layout.css` file. The JSON has two properties, warnUnknown and keys.
 
 ```ts
+// layout.json
 {
   "warnUnknown"?: boolean,
   "keys": {
