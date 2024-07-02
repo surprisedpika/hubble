@@ -6,7 +6,8 @@ use std::sync::{ Arc, OnceLock, RwLock };
 use std::collections::HashSet;
 use tauri::api::dialog::blocking::FileDialogBuilder;
 
-mod input;
+mod kbm;
+mod controller;
 
 static KEYS: OnceLock<Arc<RwLock<HashSet<String>>>> = OnceLock::new();
 
@@ -15,7 +16,7 @@ fn main() {
         ::default()
         .setup(|_app| {
             std::thread::spawn(move || {
-                input::start();
+                kbm::start();
             });
             Ok(())
         })
