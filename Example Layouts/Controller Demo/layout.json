@@ -1,0 +1,122 @@
+{
+  "warnUnknown": false,
+  "controller": "switch-pro",
+  "keys": [
+    {
+      "label": "X",
+      "keys": "cb_north",
+      "posX": 600,
+      "posY": 250,
+      "classes": "normal"
+    },
+    {
+      "label": "Y",
+      "keys": "cb_west",
+      "posX": 550,
+      "posY": 300,
+      "classes": "normal"
+    },
+    {
+      "label": "B",
+      "keys": "cb_south",
+      "posX": 600,
+      "posY": 350,
+      "classes": "normal"
+    },
+    {
+      "label": "A",
+      "keys": "cb_east",
+      "posX": 650,
+      "posY": 300,
+      "classes": "normal"
+    },
+
+    {
+      "label": "D",
+      "keys": "cb_d_down",
+      "posX": 200,
+      "posY": 350,
+      "classes": "normal"
+    },
+    {
+      "label": "R",
+      "keys": "cb_d_right",
+      "posX": 250,
+      "posY": 300,
+      "classes": "normal"
+    },
+    {
+      "label": "U",
+      "keys": "cb_d_up",
+      "posX": 200,
+      "posY": 250,
+      "classes": "normal"
+    },
+    {
+      "label": "L",
+      "keys": "cb_d_left",
+      "posX": 150,
+      "posY": 300,
+      "classes": "normal"
+    },
+
+    {
+      "label": "+",
+      "keys": "cb_face_right_top",
+      "posX": 500,
+      "posY": 250,
+      "classes": "small"
+    },
+    {
+      "label": "-",
+      "keys": "cb_face_left_top",
+      "posX": 300,
+      "posY": 250,
+      "classes": "small"
+    },
+
+    {
+      "label": "R",
+      "keys": "cb_r_bumper",
+      "posX": 550,
+      "posY": 175,
+      "classes": "rect"
+    },
+    {
+      "label": "ZR",
+      "keys": "cb_r_trigger",
+      "posX": 540,
+      "posY": 125,
+      "classes": "rect"
+    },
+    {
+      "label": "L",
+      "keys": "cb_l_bumper",
+      "posX": 250,
+      "posY": 175,
+      "classes": "rect"
+    },
+    {
+      "label": "ZL",
+      "keys": "cb_l_trigger",
+      "posX": 260,
+      "posY": 125,
+      "classes": "rect"
+    },
+
+    {
+      "label": " ",
+      "keys": "cb_r_stick_click",
+      "posX": 500,
+      "posY": 400,
+      "classes": ["normal", "stick", "r"]
+    },
+    {
+      "label": " ",
+      "keys": "cb_l_stick_click",
+      "posX": 300,
+      "posY": 400,
+      "classes": ["normal", "stick", "l"]
+    }
+  ]
+}
