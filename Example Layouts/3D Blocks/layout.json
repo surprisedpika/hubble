@@ -1,5 +1,6 @@
 {
   "warnUnknown": true,
+  "controller": "switch_pro",
   "keys": [
     {
       "label": "7",
@@ -10,7 +11,7 @@
     },
     {
       "label": "8",
-      "keys": "kb_Kp8",
+      "keys": "cb_north",
       "posX": 380,
       "posY": 195,
       "classes": "normal"

@@ -1,13 +1,16 @@
 "use client";
-
-import Keys from "@/components/keys/keys";
 import { useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 
+import Keys from "@/components/keys/keys";
+
 import styles from "./styles.module.scss";
+
+export type ControllerType = false | "pro_controller";
 
 export interface LayoutData {
   warnUnknown?: boolean;
+  controller?: ControllerType;
   keys?: {
     label: string;
     keys: string | string[];

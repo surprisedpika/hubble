@@ -4,12 +4,14 @@ use std::fs;
 use std::path::PathBuf;
 use std::sync::{ Arc, OnceLock, RwLock };
 use std::collections::HashSet;
+use controller::Controller;
 use tauri::api::dialog::blocking::FileDialogBuilder;
 
 mod kbm;
 mod controller;
 
 static KEYS: OnceLock<Arc<RwLock<HashSet<String>>>> = OnceLock::new();
+static CONTROLLER: OnceLock<Arc<RwLock<Controller>>> = OnceLock::new();
 
 fn main() {
     tauri::Builder
@@ -23,36 +25,12 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![keys, get_layout, unstick_key])
+        .invoke_handler(tauri::generate_handler![keys, get_layout, unstick_key, controller])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
 
-pub fn get_keys() -> Arc<RwLock<HashSet<String>>> {
-    Arc::clone(KEYS.get_or_init(|| Arc::new(RwLock::new(HashSet::new()))))
-}
-
-#[tauri::command]
-fn keys() -> Vec<String> {
-    let keys = get_keys() //get the arc
-        .read()
-        .unwrap() // deref the arc and acquire read lock
-        .iter() // make an iterator from the set
-        .cloned() // clone each element
-        .collect::<Vec<_>>();
-    get_keys() // Clear any mouse wheel events
-        .write()
-        .unwrap()
-        .retain(|k| !k.starts_with("mw_"));
-    return keys;
-}
-
-#[tauri::command]
-async fn unstick_key(key: String) {
-    let keys = get_keys();
-    keys.write().unwrap().remove(&key);
-}
-
+// General
 #[tauri::command]
 async fn get_layout(previous_path: Option<String>) -> Option<(String, String, String)> {
     let mut json_data: Option<String> = None;
@@ -81,4 +59,43 @@ async fn get_layout(previous_path: Option<String>) -> Option<(String, String, St
         return Some((json, css, path_str));
     }
     return None;
+}
+
+// KBM
+pub fn get_keys() -> Arc<RwLock<HashSet<String>>> {
+    Arc::clone(KEYS.get_or_init(|| Arc::new(RwLock::new(HashSet::new()))))
+}
+
+#[tauri::command]
+fn keys() -> Vec<String> {
+    let keys = get_keys() //get the arc
+        .read()
+        .unwrap() // deref the arc and acquire read lock
+        .iter() // make an iterator from the set
+        .cloned() // clone each element
+        .collect::<Vec<_>>();
+    get_keys() // Clear any mouse wheel events
+        .write()
+        .unwrap()
+        .retain(|k| !k.starts_with("mw_"));
+    keys
+}
+
+#[tauri::command]
+async fn unstick_key(key: String) {
+    let keys = get_keys();
+    keys.write().unwrap().remove(&key);
+}
+
+// Controller
+pub fn get_controller() -> Arc<RwLock<Controller>> {
+    Arc::clone(CONTROLLER.get_or_init(|| Arc::new(RwLock::new(Controller::new()))))
+}
+
+#[tauri::command]
+fn controller() -> Controller {
+    let arc_rwlock_clone = Arc::clone(&get_controller());
+    let controller = arc_rwlock_clone.read().unwrap();
+    println!("{}", controller.north);
+    controller.clone()
 }

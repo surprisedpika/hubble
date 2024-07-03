@@ -1,47 +1,32 @@
-// gilrs: doesnt support switch controllers (directx only)
-// sdl2: need to build stuff (nerd alert)
-// gamepad: doesnt work
-// steamworks: doesnt work
-
-// hidapi: too low level, last resort
-
-/*
-	Byte # 	 Remarks
-	0 		 Input report ID
-	1-3  	 Buttons:
-		first byte:
-			ZR, ZL, R, L, X, Y, A, B
-	4-7 	 Left analog stick data
-	8-11  	 Right analog stick data
-*/
+use crate::get_controller;
 
 trait GetBits {
     fn get_bit<T: Into<u8>>(&self, n: T) -> bool;
 
-    fn get_bits<T: Into<u8>>(&self, index: T, num_bits: u8) -> Option<Vec<bool>>;
+    // fn get_bits<T: Into<u8>>(&self, index: T, num_bits: u8) -> Option<Vec<bool>>;
 }
 
-impl GetBits for u8 {
-    fn get_bit<T: Into<u8>>(&self, n: T) -> bool {
-        let mask = 1 << n.into();
-        (self & mask) == mask
-    }
+// impl GetBits for u8 {
+//     fn get_bit<T: Into<u8>>(&self, n: T) -> bool {
+//         let mask = 1 << n.into();
+//         (self & mask) == mask
+//     }
 
-    fn get_bits<T: Into<u8>>(&self, index: T, num_bits: u8) -> Option<Vec<bool>> {
-        let index = index.into();
-        if index + num_bits >= 8 || num_bits == 0 {
-            None
-        } else {
-            let mut bits: Vec<bool> = Vec::new();
+//     fn get_bits<T: Into<u8>>(&self, index: T, num_bits: u8) -> Option<Vec<bool>> {
+//         let index = index.into();
+//         if index + num_bits >= 8 || num_bits == 0 {
+//             None
+//         } else {
+//             let mut bits: Vec<bool> = Vec::new();
 
-            for i in index..index + num_bits {
-                bits.push(self.get_bit(i));
-            }
+//             for i in index..index + num_bits {
+//                 bits.push(self.get_bit(i));
+//             }
 
-            Some(bits)
-        }
-    }
-}
+//             Some(bits)
+//         }
+//     }
+// }
 
 impl GetBits for u128 {
     fn get_bit<T: Into<u8>>(&self, n: T) -> bool {
@@ -49,20 +34,20 @@ impl GetBits for u128 {
         (self & mask) == mask
     }
 
-    fn get_bits<T: Into<u8>>(&self, index: T, num_bits: u8) -> Option<Vec<bool>> {
-        let index = index.into();
-        if index + num_bits >= 128 || num_bits == 0 {
-            None
-        } else {
-            let mut bits: Vec<bool> = Vec::new();
+    // fn get_bits<T: Into<u8>>(&self, index: T, num_bits: u8) -> Option<Vec<bool>> {
+    //     let index = index.into();
+    //     if index + num_bits >= 128 || num_bits == 0 {
+    //         None
+    //     } else {
+    //         let mut bits: Vec<bool> = Vec::new();
 
-            for i in index..index + num_bits {
-                bits.push(self.get_bit(i));
-            }
+    //         for i in index..index + num_bits {
+    //             bits.push(self.get_bit(i));
+    //         }
 
-            Some(bits)
-        }
-    }
+    //         Some(bits)
+    //     }
+    // }
 }
 
 #[derive(Clone, Copy)]
@@ -138,7 +123,8 @@ impl Into<u8> for Procon {
     }
 }
 
-struct Controller {
+#[derive(Clone, serde::Serialize)]
+pub struct Controller {
     pub north: bool,
     pub east: bool,
     pub south: bool,
@@ -208,6 +194,33 @@ impl Controller {
             ],
         }
     }
+
+    pub fn new() -> Controller {
+        Controller {
+            north: false,
+            east: false,
+            south: false,
+            west: false,
+
+            r_trigger: false,
+            r_bumper: false,
+            l_trigger: false,
+            l_bumper: false,
+            l_stick_click: false,
+            r_stick_click: false,
+            d_up: false,
+            d_right: false,
+            d_left: false,
+            d_down: false,
+            face_left_top: false,
+            face_left_bottom: false,
+            face_right_top: false,
+            face_right_bottom: false,
+            l_stick: (0f32, 0f32),
+            r_stick: (0f32, 0f32),
+            unknown: Vec::new(),
+        }
+    }
 }
 
 pub fn start() {
@@ -218,16 +231,21 @@ pub fn start() {
 
     let api = hidapi::HidApi::new().unwrap();
     let (procon_vid, procon_pid) = (0x057e, 0x2009);
-    let device = api.open(procon_vid, procon_pid).unwrap();
+    let procon = api.open(procon_vid, procon_pid);
 
-    loop {
-        let mut buf = [0u8; 16];
-        let res = device.read(&mut buf[..]).unwrap();
-        let data_arr: &[u8] = &buf[..res];
-        let mut data: u128 = 0;
-        for byte in data_arr.iter().rev() {
-            data = (data << 8) | (*byte as u128);
+    if let Ok(ref device) = procon {
+        loop {
+            let mut buf = [0u8; 16];
+            let res = device.read(&mut buf[..]).unwrap();
+            let data_arr: &[u8] = &buf[..res];
+            let mut data: u128 = 0;
+            for byte in data_arr.iter().rev() {
+                data = (data << 8) | (*byte as u128);
+            }
+            let controller = &get_controller();
+            let mut writeable_controller = controller.write().unwrap();
+            let controller_data = Controller::from_procon_bytes(data);
+            *writeable_controller = controller_data;
         }
-        let controller = Controller::from_procon_bytes(data);
     }
 }
