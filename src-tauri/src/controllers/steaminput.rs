@@ -45,26 +45,25 @@ pub enum SteamInput {
 
 impl SteamInput {
     fn get_stick_data(data: u128, left: bool) -> (f32, f32) {
+        // this is true
         // 24 bits per stick
         // each direction is an i12 (dw about it)
         // the first 12 bits are the y
         // the second 12 bits are the x
-        // big endian (i think)
+        // big endian
         let offset = if left { 7 } else { 4 };
         let bytes = data.to_be_bytes();
         let data = &bytes[offset..offset + 3];
+        // this is less true
         // data[0] == 1(sign)7(most significant bits of stick_y)
         // data[1] == 4(least significant bits of stick_y)1(sign)3(most significant bits of stick_x)
         // data[2] == 8(least significant bits of stick_x)
-        // (data[0] << 8 & data[1]) >> 4 (might fuck up sign bit)
-        // let stick_x: f32 = i16::from_be_bytes([data[1], data[0]]) as f32;
-        // let stick_y: f32 = i16::from_be_bytes([data[2], data[1]]) as f32;
-        let stick_x: i8 = data[1] as i8; // might fuck up the sign bit
-        let stick_x_two: i16 = (((stick_x as i16) << 8) & (data[1] as i8 as i16)) >> 4;
-        println!("{}", stick_x_two);
-        let x: f32 = ((stick_x_two as f32) - 32767f32) / 32767f32;
-        // let y: f32 = (stick_y - 32767f32) / 32767f32;
-        (x, 0f32)
+        if left {
+            print!("{:08b} ", data[0]);
+            print!("{:08b} ", (data[1] >> 4) << 4);
+            print!("\n");
+        }
+        (0f32, 0f32)
     }
 
     pub fn from_bytes(d: u128) -> Controller {

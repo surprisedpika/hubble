@@ -11,6 +11,13 @@ impl GetBit for u128 {
     }
 }
 
+impl GetBit for u8 {
+    fn get_bit<T: Into<u8>>(&self, n: T) -> bool {
+        let mask = 1 << n.into();
+        (self & mask) == mask
+    }
+}
+
 #[derive(Clone, serde::Serialize)]
 pub struct Controller {
     pub north: bool,
@@ -89,10 +96,10 @@ pub fn start() {
             let data_arr: &[u8] = &buf[..res];
             let mut data: u128 = 0;
             for byte in data_arr.iter().rev() {
-                print!("{:08b} ", byte);
+                // print!("{:08b} ", byte);
                 data = (data << 8) | (*byte as u128);
             }
-            print!("\n");
+            // print!("\n");
             let controller = &get_controller();
             let mut writeable_controller = controller.write().unwrap();
             let controller_data = SteamInput::from_bytes(data);
