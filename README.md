@@ -1,8 +1,10 @@
-![Hubble Banner](https://raw.githubusercontent.com/surprisedpika/hubble/master/hubble.png)
+![Hubble Banner](https://raw.githubusercontent.com/surprisedpika/hubble/master/github-assets/hubble.png)
 
 # Hubble
 
 Hubble is an input viewer for Windows, MacOS, and Linux (probably).
+
+![Controller Example](https://raw.githubusercontent.com/surprisedpika/hubble/master/github-assets/controller.gif)
 
 ## Layouts
 
@@ -196,6 +198,8 @@ Currently, the only supported controller is the Nintendo Switch Pro Controller. 
 Due to control sticks being analog, they are seperately handled. Any key can access the custom properties `--l-stick-x`, `--l-stick-y`, `--r-stick-x`, and `--r-stick-y`. These values are all floats ranging from -1 to 1 (the exact maximum and minimum depend on hardware and calibration, some testing is required). -1, -1 is at the top left (on most control sticks `sqrt(x * x + y * y)` will not exceed `sqrt(2)`).
 
 ## Styling
+
+![Advanced CSS Example](https://raw.githubusercontent.com/surprisedpika/hubble/master/github-assets/3d.gif)
 
 The `.global` class can be used to style the div which wraps around all keys (for example, setting the background colour).
 
