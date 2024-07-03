@@ -96,6 +96,5 @@ pub fn get_controller() -> Arc<RwLock<Controller>> {
 fn controller() -> Controller {
     let arc_rwlock_clone = Arc::clone(&get_controller());
     let controller = arc_rwlock_clone.read().unwrap();
-    println!("{}", controller.north);
     controller.clone()
 }

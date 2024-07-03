@@ -25,7 +25,11 @@ export default function Keys(props: props) {
   const [unknownKey, setUnknownKey] = useState("");
 
   useEffect(() => {
-    invoke<Controller | null>("controller").then(data => setController(data));
+    if (props.layout?.controller) {
+      invoke<Controller | null>("controller").then((data) =>
+        setController(data)
+      );
+    }
     const sync = () => {
       invoke<string[] | null>("keys").then((keys) => {
         if (!Array.isArray(keys)) {
@@ -77,10 +81,28 @@ export default function Keys(props: props) {
       document.removeEventListener("keydown", keydownCallback);
       document.removeEventListener("keyup", keyupCallback);
     };
-  }, [globalPressedKeys, localPressedKeys]);
+  }, [globalPressedKeys, localPressedKeys, props.layout?.controller]);
 
   return (
-    <div className={`${styles.keys} global`}>
+    <div
+      className={`${styles.keys} global`}
+      style={
+        {
+          "--l-stick-x": `${
+            props.layout?.controller ? controller?.l_stick[0] : 0
+          }`,
+          "--l-stick-y": `${
+            props.layout?.controller ? controller?.l_stick[1] : 0
+          }`,
+          "--r-stick-x": `${
+            props.layout?.controller ? controller?.r_stick[0] : 0
+          }`,
+          "--r-stick-y": `${
+            props.layout?.controller ? controller?.r_stick[1] : 0
+          }`,
+        } as React.CSSProperties
+      }
+    >
       {Array.isArray(props.layout?.keys) &&
         props.layout.keys.map((key, index) => {
           const isPressed = isKeyPressed(

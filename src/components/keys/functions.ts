@@ -42,10 +42,24 @@ export function localToGlobalKey(key: string): string {
 
 function isControllerButtonPressed(b: string, controller: Controller) {
   const button = b.substring(3);
-  if (controller[button as keyof Controller]) {
-    return true;
+  if (button.startsWith("unknown")) {
+    let match = button.match(/\((\d+)\)/);
+    if (match === null) {
+      throw new Error(`Error parsing layout.json syntax at button: ${button}`);
+    }
+    let i = Number(match[1]);
+    if (i < 0 || !Number.isInteger(i)) {
+      throw new Error(`Error parsing layout.json syntax at button: ${button}`);
+    }
+    if (controller.unknown.length - 1 < i) {
+      return false;
+    }
+    return controller.unknown[i];
   }
-  return false;
+  if (button.includes("stick")) {
+    return false;
+  }
+  return !!controller[button as keyof Controller];
 }
 
 export function isKeyPressed(
@@ -72,8 +86,8 @@ export function isKeyPressed(
     if (
       keys.some((key) => {
         globalPressedKeys.has(key) ||
-        localPressedKeys.has(key) ||
-        (controller !== null && isControllerButtonPressed(key, controller));
+          localPressedKeys.has(key) ||
+          (controller !== null && isControllerButtonPressed(key, controller));
       })
     ) {
       return true;

@@ -1,6 +1,6 @@
 {
   "warnUnknown": true,
-  "controller": "switch_pro",
+  "controller": false,
   "keys": [
     {
       "label": "7",

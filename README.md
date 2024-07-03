@@ -12,6 +12,7 @@ Layouts are stored in a `layout.json` file and `layout.css` file. The JSON has t
 // layout.json
 {
   "warnUnknown"?: boolean,
+  "controller"?: false | string,
   "keys": {
     "label": string,
     "keys": string or string[],
@@ -168,6 +169,20 @@ A list of CSS classes applied to this key. The CSS classes are defined in the `l
 
 Additionally, each key is given a `.pressed` class when the key is pressed.
 
+### Controllers
+
+Currently, the only supported controller is the Nintendo Switch Pro Controller. Set the "controller" key to "switch_pro" in layout.json to enable controller polling.
+
+Due to control sticks being analog, they are seperately handled. Any key can access the custom properties `--l-stick-x`, `--l-stick-y`, `--r-stick-x`, and `--r-stick-y`. These values are all floats ranging from -1 to 1 (the exact maximum and minimum depend on hardware and calibration, some testing is required). -1, -1 is at the top left (on most control sticks `sqrt(x * x + y * y)` will not exceed `sqrt(2)`).
+
+## Styling
+
+The `.global` class can be used to style the div which wraps around all keys (for example, setting the background colour).
+
+If you wish to use any external files in the styling, those files must either be uploaded to the internet, or converted to use the [data URI scheme](https://en.wikipedia.org/wiki/Data_URI_scheme).
+
+If you wish for an element that is not a key, for additional styling, you can pass an empty array to `keys`, or only pass classes that do not style `.pressed`.
+
 The default styles for a key are as follows:
 
 ```css
@@ -181,12 +196,6 @@ The default styles for a key are as follows:
 ```
 
 There are no additional default styles for a pressed key.
-
-## Styling
-
-The `.global` class can be used to style the div which wraps around all keys (for example, setting the background colour).
-
-If you wish to use any external files in the styling, those files must either be uploaded to the internet, or converted to use the [data URI scheme](https://en.wikipedia.org/wiki/Data_URI_scheme).
 
 ## Using Hubble
 
