@@ -15,21 +15,53 @@
 	8-11  	 Right analog stick data
 */
 
-trait GetBit {
+trait GetBits {
     fn get_bit<T: Into<u8>>(&self, n: T) -> bool;
+
+    fn get_bits<T: Into<u8>>(&self, index: T, num_bits: u8) -> Option<Vec<bool>>;
 }
 
-impl GetBit for u8 {
+impl GetBits for u8 {
     fn get_bit<T: Into<u8>>(&self, n: T) -> bool {
         let mask = 1 << n.into();
         (self & mask) == mask
     }
+
+    fn get_bits<T: Into<u8>>(&self, index: T, num_bits: u8) -> Option<Vec<bool>> {
+        let index = index.into();
+        if index + num_bits >= 8 || num_bits == 0 {
+            None
+        } else {
+            let mut bits: Vec<bool> = Vec::new();
+
+            for i in index..index + num_bits {
+                bits.push(self.get_bit(i));
+            }
+
+            Some(bits)
+        }
+    }
 }
 
-impl GetBit for u64 {
+impl GetBits for u128 {
     fn get_bit<T: Into<u8>>(&self, n: T) -> bool {
         let mask = 1 << n.into();
         (self & mask) == mask
+    }
+
+    fn get_bits<T: Into<u8>>(&self, index: T, num_bits: u8) -> Option<Vec<bool>> {
+        let index = index.into();
+        if index + num_bits >= 128 || num_bits == 0 {
+            None
+        } else {
+            let mut bits: Vec<bool> = Vec::new();
+
+            for i in index..index + num_bits {
+                bits.push(self.get_bit(i));
+            }
+
+            Some(bits)
+        }
     }
 }
 
@@ -55,12 +87,22 @@ enum Procon {
     Unknown1 = 22,
     Unknown2 = 23,
 
-    // 24-27: Dpad
+    // 24: Dpad
+    // 25: Dpad
+    // 26: Dpad
+    // 27: Dpad
+    Unknown3 = 28,
+    Unknown4 = 29,
+    Unknown5 = 30,
+    Unknown6 = 31,
+
+    // Lstick: 32 - 55
+    // Rstick: 56 - 79
 }
 
 impl Procon {
     // No, I don't know why nintendo did it this way either
-    fn decode_dpad(data: u64) -> (bool, bool, bool, bool) {
+    fn decode_dpad(data: u128) -> (bool, bool, bool, bool) {
         let mut dpad_bits: u8 = 0;
         dpad_bits += data.get_bit(24) as u8;
         dpad_bits += (data.get_bit(25) as u8) << 1;
@@ -76,6 +118,17 @@ impl Procon {
             let right = if 1 <= dpad_bits && dpad_bits <= 3 { true } else { false };
             (up, down, left, right)
         }
+    }
+
+    fn get_stick_data(data: u128, left: bool) -> (f32, f32) {
+        let offset = if left { 4 } else { 8 };
+        let bytes = data.to_le_bytes();
+        let data = &bytes[offset..];
+        let stick_x: f32 = u16::from_le_bytes([data[0], data[1]]).into();
+        let stick_y: f32 = u16::from_le_bytes([data[2], data[3]]).into();
+        let x: f32 = (stick_x - 32767f32) / 32767f32;
+        let y: f32 = (stick_y - 32767f32) / 32767f32;
+        (x, y)
     }
 }
 
@@ -109,14 +162,14 @@ struct Controller {
     pub face_right_top: bool,
     pub face_right_bottom: bool,
 
-    pub l_stick: (u16, u16),
-    pub r_stick: (u16, u16),
+    pub l_stick: (f32, f32),
+    pub r_stick: (f32, f32),
 
     pub unknown: Vec<bool>,
 }
 
 impl Controller {
-    pub fn from_procon_bytes(data: u64) -> Controller {
+    pub fn from_procon_bytes(data: u128) -> Controller {
         let dpad = Procon::decode_dpad(data);
 
         Controller {
@@ -142,10 +195,17 @@ impl Controller {
             face_left_bottom: data.get_bit(Procon::Home),
             face_right_top: data.get_bit(Procon::Minus),
             face_right_bottom: data.get_bit(Procon::Screenshot),
-            l_stick: (0, 0),
-            r_stick: (0, 0),
+            l_stick: Procon::get_stick_data(data, true),
+            r_stick: Procon::get_stick_data(data, false),
 
-            unknown: vec![data.get_bit(Procon::Unknown1), data.get_bit(Procon::Unknown2)],
+            unknown: vec![
+                data.get_bit(Procon::Unknown1),
+                data.get_bit(Procon::Unknown2),
+                data.get_bit(Procon::Unknown3),
+                data.get_bit(Procon::Unknown4),
+                data.get_bit(Procon::Unknown5),
+                data.get_bit(Procon::Unknown6)
+            ],
         }
     }
 }
@@ -161,12 +221,12 @@ pub fn start() {
     let device = api.open(procon_vid, procon_pid).unwrap();
 
     loop {
-        let mut buf = [0u8; 12];
+        let mut buf = [0u8; 16];
         let res = device.read(&mut buf[..]).unwrap();
         let data_arr: &[u8] = &buf[..res];
-        let mut data: u64 = 0;
+        let mut data: u128 = 0;
         for byte in data_arr.iter().rev() {
-            data = (data << 8) | (*byte as u64);
+            data = (data << 8) | (*byte as u128);
         }
         let controller = Controller::from_procon_bytes(data);
     }
