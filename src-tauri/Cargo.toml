@@ -1,10 +1,10 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
+name = "Hubble"
+version = "0.2.0"
+description = "A Tauri App for displaying inputs"
+authors = ["SurprisedPika"]
+license = "Unlicense"
+repository = "https://github.com/surprisedpika/hubble"
 default-run = "app"
 edition = "2021"
 rust-version = "1.60"
