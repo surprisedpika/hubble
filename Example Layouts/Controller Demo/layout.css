@@ -1,0 +1,54 @@
+.pressed {
+  background-color: blue;
+}
+
+.normal,
+.small,
+.rect {
+  font-family: sans-serif;
+  align-items: center;
+  place-content: center;
+  font-weight: bold;
+  outline-style: solid;
+  outline-color: #eee;
+  transform: translateX(-50%);
+}
+
+.normal,
+.small {
+  border-radius: 100vmax;
+  aspect-ratio: 1;
+}
+
+.normal {
+  width: 2em;
+  padding: 1em;
+  outline-width: 3px;
+}
+
+.small {
+  width: 1.5em;
+  padding: 0.5em;
+  outline-width: 2px;
+  font-size: 0.85rem;
+}
+
+.rect {
+  border-radius: 0.5em;
+  padding-inline: 3em;
+  padding-block: 0.5em;
+}
+
+.l {
+  --stick-y: var(--l-stick-y);
+  --stick-x: var(--l-stick-x);
+}
+
+.r {
+  --stick-y: var(--r-stick-y);
+  --stick-x: var(--r-stick-x);
+}
+
+.stick {
+  transform: translateX(calc(-50% + 40px * var(--stick-x))) translateY(calc(40px * var(--stick-y)));
+}

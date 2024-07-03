@@ -63,8 +63,8 @@ enum Procon {
     Zl = 14,
     Zr = 15,
 
-    Minus = 16,
-    Plus = 17,
+    Plus = 16,
+    Minus = 17,
     LStick = 18,
     RStick = 19,
     Home = 20,

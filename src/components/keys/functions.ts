@@ -56,7 +56,7 @@ function isControllerButtonPressed(b: string, controller: Controller) {
     }
     return controller.unknown[i];
   }
-  if (button.includes("stick")) {
+  if (button == "l_stick" || button == "r_stick") {
     return false;
   }
   return !!controller[button as keyof Controller];
@@ -68,7 +68,6 @@ export function isKeyPressed(
   localPressedKeys: Set<string>,
   controller: Controller | null
 ): boolean {
-  console.log(controller?.north);
   if (typeof keys === "string") {
     if (keys.startsWith("cb_")) {
       if (controller === null) {
