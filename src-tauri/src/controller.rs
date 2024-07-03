@@ -15,33 +15,73 @@
 	8-11  	 Right analog stick data
 */
 
+trait GetBit {
+    fn get_bit<T: Into<u8>>(&self, n: T) -> bool;
+}
+
+impl GetBit for u8 {
+    fn get_bit<T: Into<u8>>(&self, n: T) -> bool {
+        let mask = 1 << n.into();
+        (self & mask) == mask
+    }
+}
+
+impl GetBit for u64 {
+    fn get_bit<T: Into<u8>>(&self, n: T) -> bool {
+        let mask = 1 << n.into();
+        (self & mask) == mask
+    }
+}
+
 #[derive(Clone, Copy)]
 enum Procon {
-    B = 1 << 08,
-    A = 1 << 09,
-    Y = 1 << 10,
-    X = 1 << 11,
-    L = 1 << 12,
-    R = 1 << 13,
-    Zl = 1 << 14,
-    Zr = 1 << 15,
+    // 0-7: Input report ID
 
-    Minus = 1 << 16,
-    Plus = 1 << 17,
-    LStick = 1 << 18,
-    RStick = 1 << 19,
-    Home = 1 << 20,
-    Screenshot = 1 << 21,
-    Unknown1 = 1 << 22,
-    Unknown2 = 1 << 23,
+    B = 08,
+    A = 09,
+    Y = 10,
+    X = 11,
+    L = 12,
+    R = 13,
+    Zl = 14,
+    Zr = 15,
+
+    Minus = 16,
+    Plus = 17,
+    LStick = 18,
+    RStick = 19,
+    Home = 20,
+    Screenshot = 21,
+    Unknown1 = 22,
+    Unknown2 = 23,
 
     // 24-27: Dpad
 }
 
 impl Procon {
-    fn is_pressed(&self, data: u64) -> bool {
-        let button = *self as u64;
-        return (data & button) == button;
+    // No, I don't know why nintendo did it this way either
+    fn decode_dpad(data: u64) -> (bool, bool, bool, bool) {
+        let mut dpad_bits: u8 = 0;
+        dpad_bits += data.get_bit(24) as u8;
+        dpad_bits += (data.get_bit(25) as u8) << 1;
+        dpad_bits += (data.get_bit(26) as u8) << 2;
+        dpad_bits += (data.get_bit(27) as u8) << 3;
+
+        if dpad_bits > 7 {
+            return (false, false, false, false);
+        } else {
+            let up = if dpad_bits == 7 || dpad_bits <= 1 { true } else { false };
+            let down = if 3 <= dpad_bits && dpad_bits <= 5 { true } else { false };
+            let left = if 5 <= dpad_bits && dpad_bits <= 7 { true } else { false };
+            let right = if 1 <= dpad_bits && dpad_bits <= 3 { true } else { false };
+            (up, down, left, right)
+        }
+    }
+}
+
+impl Into<u8> for Procon {
+    fn into(self) -> u8 {
+        self as u8
     }
 }
 
@@ -77,21 +117,35 @@ struct Controller {
 
 impl Controller {
     pub fn from_procon_bytes(data: u64) -> Controller {
+        let dpad = Procon::decode_dpad(data);
+
         Controller {
-            north: Procon::X.is_pressed(data),
-            east: Procon::A.is_pressed(data),
-            south: Procon::B.is_pressed(data),
-            west: Procon::Y.is_pressed(data),
+            north: data.get_bit(Procon::X),
+            east: data.get_bit(Procon::A),
+            south: data.get_bit(Procon::B),
+            west: data.get_bit(Procon::Y),
 
-            r_trigger: Procon::Zr.is_pressed(data),
-            l_trigger: Procon::Zl.is_pressed(data),
-            r_bumper: Procon::R.is_pressed(data),
-            l_bumper: Procon::L.is_pressed(data),
+            r_trigger: data.get_bit(Procon::Zr),
+            l_trigger: data.get_bit(Procon::Zl),
+            r_bumper: data.get_bit(Procon::R),
+            l_bumper: data.get_bit(Procon::L),
 
-            r_stick_click: Procon::RStick.is_pressed(data),
-            l_stick_click: Procon::LStick.is_pressed(data),
+            r_stick_click: data.get_bit(Procon::RStick),
+            l_stick_click: data.get_bit(Procon::LStick),
 
-            unknown: vec![Procon::Unknown1.is_pressed(data), Procon::Unknown2.is_pressed(data)],
+            d_up: dpad.0,
+            d_down: dpad.1,
+            d_left: dpad.2,
+            d_right: dpad.3,
+
+            face_left_top: data.get_bit(Procon::Plus),
+            face_left_bottom: data.get_bit(Procon::Home),
+            face_right_top: data.get_bit(Procon::Minus),
+            face_right_bottom: data.get_bit(Procon::Screenshot),
+            l_stick: (0, 0),
+            r_stick: (0, 0),
+
+            unknown: vec![data.get_bit(Procon::Unknown1), data.get_bit(Procon::Unknown2)],
         }
     }
 }
@@ -115,18 +169,5 @@ pub fn start() {
             data = (data << 8) | (*byte as u64);
         }
         let controller = Controller::from_procon_bytes(data);
-        println!("{:#064b}", data);
-        // 24-27: dpad
-
-        // looking at just 24-27:
-        // NO + NO: 0b0001
-        // DR + NO: 0b0100
-        // DL + NO: 0b0110
-        // DU + NO: 0b0000
-        // DD + NO: 0b0010
-        // DU + DL: 0b1110
-        // DU + DR: 0b1000
-        // DD + DL: 0b1010
-        // DD + DR: 0b1100
     }
 }
