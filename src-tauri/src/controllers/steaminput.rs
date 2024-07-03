@@ -52,15 +52,26 @@ impl SteamInput {
         // the second 12 bits are the x
         // big endian
         let offset = if left { 7 } else { 4 };
-        let bytes = data.to_be_bytes();
+        let bytes = data.to_le_bytes();
         let data = &bytes[offset..offset + 3];
         // this is less true
         // data[0] == 1(sign)7(most significant bits of stick_y)
         // data[1] == 4(least significant bits of stick_y)1(sign)3(most significant bits of stick_x)
         // data[2] == 8(least significant bits of stick_x)
-        if left {
-            print!("{:08b} ", data[0]);
-            print!("{:08b} ", (data[1] >> 4) << 4);
+        if !left {
+            let y_sign = data[0].get_bit(0);
+            let x_sign = data[1].get_bit(4);
+            if y_sign {
+                print!("top");
+            } else {
+                print!("bottom");
+            }
+            print!(" ");
+            if x_sign {
+                print!("right");
+            } else {
+                print!("left");
+            }
             print!("\n");
         }
         (0f32, 0f32)
