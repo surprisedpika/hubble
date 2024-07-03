@@ -1,53 +1,14 @@
 use crate::get_controller;
 
-trait GetBits {
+trait GetBit {
     fn get_bit<T: Into<u8>>(&self, n: T) -> bool;
-
-    // fn get_bits<T: Into<u8>>(&self, index: T, num_bits: u8) -> Option<Vec<bool>>;
 }
 
-// impl GetBits for u8 {
-//     fn get_bit<T: Into<u8>>(&self, n: T) -> bool {
-//         let mask = 1 << n.into();
-//         (self & mask) == mask
-//     }
-
-//     fn get_bits<T: Into<u8>>(&self, index: T, num_bits: u8) -> Option<Vec<bool>> {
-//         let index = index.into();
-//         if index + num_bits >= 8 || num_bits == 0 {
-//             None
-//         } else {
-//             let mut bits: Vec<bool> = Vec::new();
-
-//             for i in index..index + num_bits {
-//                 bits.push(self.get_bit(i));
-//             }
-
-//             Some(bits)
-//         }
-//     }
-// }
-
-impl GetBits for u128 {
+impl GetBit for u128 {
     fn get_bit<T: Into<u8>>(&self, n: T) -> bool {
         let mask = 1 << n.into();
         (self & mask) == mask
     }
-
-    // fn get_bits<T: Into<u8>>(&self, index: T, num_bits: u8) -> Option<Vec<bool>> {
-    //     let index = index.into();
-    //     if index + num_bits >= 128 || num_bits == 0 {
-    //         None
-    //     } else {
-    //         let mut bits: Vec<bool> = Vec::new();
-
-    //         for i in index..index + num_bits {
-    //             bits.push(self.get_bit(i));
-    //         }
-
-    //         Some(bits)
-    //     }
-    // }
 }
 
 #[derive(Clone, Copy)]
