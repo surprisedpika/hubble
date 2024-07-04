@@ -45,36 +45,24 @@ pub enum SteamInput {
 
 impl SteamInput {
     fn get_stick_data(data: u128, left: bool) -> (f32, f32) {
-        // this is true
-        // 24 bits per stick
-        // each direction is an i12 (dw about it)
-        // the first 12 bits are the y
-        // the second 12 bits are the x
-        // big endian
         let offset = if left { 7 } else { 4 };
         let bytes = data.to_le_bytes();
         let data = &bytes[offset..offset + 3];
-        // this is less true
-        // data[0] == 1(sign)7(most significant bits of stick_y)
-        // data[1] == 4(least significant bits of stick_y)1(sign)3(most significant bits of stick_x)
-        // data[2] == 8(least significant bits of stick_x)
-        if !left {
-            let y_sign = data[0].get_bit(0);
-            let x_sign = data[1].get_bit(4);
-            if y_sign {
-                print!("top");
-            } else {
-                print!("bottom");
-            }
-            print!(" ");
-            if x_sign {
-                print!("right");
-            } else {
-                print!("left");
-            }
-            print!("\n");
-        }
-        (0f32, 0f32)
+
+        // data is an array of the 3 bytes that store the stick data
+        // data[0].reverse_bits() Ranges from 0 (bottom) to 256 (top)
+        let first_byte_y = data[0].reverse_bits();
+        // This might be the wrong way round
+        let second_byte_y = (data[1] & 0b00001111).reverse_bits() >> 4;
+        // 12 bit unsigned integer (ranges from 0 > 4096)
+        let y_component: u16 = ((first_byte_y as u16) << 4) | (second_byte_y as u16);
+        let y: f32 = -(((y_component as f32) - 2048f32) / 2048f32);
+
+        let first_byte_x = (data[1] & 0b11110000).reverse_bits();
+        let second_byte_x = data[2].reverse_bits();
+        let x_component = ((first_byte_x as u16) << 8) | (second_byte_x as u16);
+        let x: f32 = ((x_component as f32) - 2048f32) / 2048f32;
+        (x, y)
     }
 
     pub fn from_bytes(d: u128) -> Controller {
