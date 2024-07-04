@@ -6,11 +6,9 @@ import Keys from "@/components/keys/keys";
 
 import styles from "./styles.module.scss";
 
-export type ControllerType = false | "pro_controller";
-
 export interface LayoutData {
   warnUnknown?: boolean;
-  controller?: ControllerType;
+  controller?: boolean;
   keys?: {
     label: string;
     keys: string | string[];

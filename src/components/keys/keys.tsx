@@ -27,7 +27,6 @@ export default function Keys(props: props) {
   useEffect(() => {
     if (props.layout?.controller) {
       invoke<Controller | null>("controller").then((data) => {
-        console.log(data?.r_stick_click);
         setController(data);
       });
     }

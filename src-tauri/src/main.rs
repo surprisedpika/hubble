@@ -9,6 +9,7 @@ use tauri::api::dialog::blocking::FileDialogBuilder;
 
 mod kbm;
 mod controller;
+mod controllers;
 
 static KEYS: OnceLock<Arc<RwLock<HashSet<String>>>> = OnceLock::new();
 static CONTROLLER: OnceLock<Arc<RwLock<Controller>>> = OnceLock::new();
