@@ -102,7 +102,13 @@ pub fn start() {
             // print!("\n");
             let controller = &get_controller();
             let mut writeable_controller = controller.write().unwrap();
-            let controller_data = SteamInput::from_bytes(data);
+            // This is very scientific dont worry about it
+            let is_steaminput = (data << 124) == 0;
+            let controller_data = if is_steaminput {
+                SteamInput::from_bytes(data)
+            } else {
+                Procon::from_bytes(data)
+            };
             *writeable_controller = controller_data;
         }
     }

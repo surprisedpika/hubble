@@ -1,11 +1,12 @@
-// 2nd byte is 0 when using steaminput, or 0b11 when using hid
 use crate::controller::{ Controller, GetBit };
 
 #[derive(Clone, Copy)]
 pub enum SteamInput {
     // This might actually be xinput or it might be steaminput but only for procons who knows
 
-    // 0 - 23: Always (?) 0b0
+    // 0 - 7: Always (?) 0b0
+    // 8 - 15: """
+    // 16 - 23: """
     // 24-31: Always (?) 0b1011
 
     // 32-55: rstick

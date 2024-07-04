@@ -1,5 +1,6 @@
 {
   "warnUnknown": true,
+  "controller": false,
   "keys": [
     {
       "label": "W",

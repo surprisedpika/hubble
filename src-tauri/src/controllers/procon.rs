@@ -39,10 +39,10 @@ impl Procon {
     // No, I don't know why nintendo did it this way either
     fn decode_dpad(data: u128) -> (bool, bool, bool, bool) {
         let mut dpad_bits: u8 = 0;
-        dpad_bits += data.get_bit(24) as u8;
-        dpad_bits += (data.get_bit(25) as u8) << 1;
-        dpad_bits += (data.get_bit(26) as u8) << 2;
-        dpad_bits += (data.get_bit(27) as u8) << 3;
+        dpad_bits |= data.get_bit(24) as u8;
+        dpad_bits |= (data.get_bit(25) as u8) << 1;
+        dpad_bits |= (data.get_bit(26) as u8) << 2;
+        dpad_bits |= (data.get_bit(27) as u8) << 3;
 
         if dpad_bits > 7 {
             return (false, false, false, false);

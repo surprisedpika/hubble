@@ -14,7 +14,7 @@ Layouts are stored in a `layout.json` file and `layout.css` file. The JSON has t
 // layout.json
 {
   "warnUnknown"?: boolean,
-  "controller"?: false | string,
+  "controller"?: boolean,
   "keys": {
     "label": string,
     "keys": string or string[],
@@ -31,7 +31,10 @@ Defaults to true. When keys unknown to the program are encountered, show a popup
 
 ### Controller
 
-Set this to the brand of controller you wish to display. Currently, only Switch Pro Controllers are supported (`switch-pro`)
+Set this if you wish the input display to poll controllers. Supported Controllers:
+
+- Switch Pro using HID & Bluetooth
+- Switch Pro (and possibly other controllers, I don't own any to check) using SteamInput
 
 ### Label
 
