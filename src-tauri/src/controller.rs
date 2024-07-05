@@ -103,7 +103,6 @@ pub fn start() {
     let api = hidapi::HidApi::new().unwrap();
     let (vid, pid) = (VID::Nintendo as u16, PID::ProCon as u16);
     while get_controller_polling_state().read().unwrap().clone() == true {
-        println!("Polling...");
         let open_device = api.open(vid, pid);
         if let Ok(ref device) = open_device {
             let mut buf = [0u8; 16];
