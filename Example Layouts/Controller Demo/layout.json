@@ -33,28 +33,28 @@
 
     {
       "label": "D",
-      "keys": "cb_d_down",
+      "keys": "cb_dpad_south",
       "posX": 200,
       "posY": 350,
       "classes": "normal"
     },
     {
       "label": "R",
-      "keys": "cb_d_right",
+      "keys": "cb_dpad_east",
       "posX": 250,
       "posY": 300,
       "classes": "normal"
     },
     {
       "label": "U",
-      "keys": "cb_d_up",
+      "keys": "cb_dpad_north",
       "posX": 200,
       "posY": 250,
       "classes": "normal"
     },
     {
       "label": "L",
-      "keys": "cb_d_left",
+      "keys": "cb_dpad_west",
       "posX": 150,
       "posY": 300,
       "classes": "normal"
@@ -62,14 +62,14 @@
 
     {
       "label": "+",
-      "keys": "cb_face_right_top",
+      "keys": "cb_face_top_right",
       "posX": 500,
       "posY": 250,
       "classes": "small"
     },
     {
       "label": "-",
-      "keys": "cb_face_left_top",
+      "keys": "cb_face_top_left",
       "posX": 300,
       "posY": 250,
       "classes": "small"

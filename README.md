@@ -171,21 +171,21 @@ There are 4 types of key:
 | cb_north             | X on Switch, △ on Playstation, Y on Xbox                           |
 | cb_south             | B on Switch, X on Playstation, A on Xbox                           |
 | cb_east              | A on Switch, O on Playstation, B on Xbox                           |
-| cb_west              | A on Switch, O on Playstation, X on Xbox                           |
+| cb_west              | A on Switch, ■ on Playstation, X on Xbox                           |
 | cb_r_trigger         | ZR on Switch, R2 on Playstation, RT on Xbox                        |
 | cb_l_trigger         | ZL on Switch, L2 on Playstation, LT on Xbox                        |
 | cb_r_bumper          | R on Switch, R1 on Playstation, RB on Xbox                         |
 | cb_l_bumper          | L on Switch, L1 on Playstation, LB on Xbox                         |
 | cb_l_stick_click     |                                                                    |
 | cb_r_stick_click     |                                                                    |
-| cb_d_up              |                                                                    |
-| cb_d_down            |                                                                    |
-| cb_d_left            |                                                                    |
-| cb_d_right           |                                                                    |
-| cb_face_left_top     | Minus on Switch, Share on Playstation, View on Xbox                |
-| cb_face_left_bottom  | Screenshot on Switch, Screenshot on Playstation, Share on Xbox     |
-| cb_face_right_top    | Plus on Switch, Touchpad Click on Playstation, Xbox Button on Xbox |
-| cb_face_right_bottom | Home on Switch, Options on Playstation, Menu on Xbox               |
+| cb_dpad_north        |                                                                    |
+| cb_dpad_south        |                                                                    |
+| cb_dpad_west         |                                                                    |
+| cb_dpad_east         |                                                                    |
+| cb_face_top_left     | Minus on Switch, Share on Playstation, View on Xbox                |
+| cb_face_bottom_left  | Screenshot on Switch, Screenshot on Playstation, Share on Xbox     |
+| cb_face_top_right    | Plus on Switch, Touchpad Click on Playstation, Xbox Button on Xbox |
+| cb_face_bottom_right | Home on Switch, Options on Playstation, Menu on Xbox               |
 | unknown(x)           | Unknown controller event (`x` is a uint)                           |
 
 ### PosX and PosY

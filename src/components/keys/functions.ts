@@ -109,15 +109,15 @@ export interface Controller {
   l_stick_click: boolean;
   r_stick_click: boolean;
 
-  d_up: boolean;
-  d_down: boolean;
-  d_left: boolean;
-  d_right: boolean;
+  dpad_up: boolean;
+  dpad_down: boolean;
+  dpad_left: boolean;
+  dpad_right: boolean;
 
-  face_left_top: boolean;
-  face_left_bottom: boolean;
-  face_right_top: boolean;
-  face_right_bottom: boolean;
+  face_top_left: boolean;
+  face_bottom_left: boolean;
+  face_top_right: boolean;
+  face_bottom_right: boolean;
 
   l_stick: [number, number];
   r_stick: [number, number];

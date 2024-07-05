@@ -1,6 +1,10 @@
 use crate::{ controllers::{ procon::Procon, steaminput::SteamInput }, get_controller };
 
 pub trait GetBit {
+    /**
+     *  Returns the bit at the index `n`, which can range from `0 - (num_bits - 1)`
+     *  When `n = 0`, the **least significant** bit is returned. When it is `(num_bits - 1)`, the most significant bit is returned.
+    */
     fn get_bit<T: Into<u8>>(&self, n: T) -> bool;
 }
 
@@ -33,15 +37,15 @@ pub struct Controller {
     pub l_stick_click: bool,
     pub r_stick_click: bool,
 
-    pub d_up: bool,
-    pub d_right: bool,
-    pub d_left: bool,
-    pub d_down: bool,
+    pub dpad_north: bool,
+    pub dpad_east: bool,
+    pub dpad_west: bool,
+    pub dpad_south: bool,
 
-    pub face_left_top: bool,
-    pub face_left_bottom: bool,
-    pub face_right_top: bool,
-    pub face_right_bottom: bool,
+    pub face_top_left: bool,
+    pub face_bottom_left: bool,
+    pub face_top_right: bool,
+    pub face_bottom_right: bool,
 
     pub l_stick: (f32, f32),
     pub r_stick: (f32, f32),
@@ -63,14 +67,14 @@ impl Controller {
             l_bumper: false,
             l_stick_click: false,
             r_stick_click: false,
-            d_up: false,
-            d_right: false,
-            d_left: false,
-            d_down: false,
-            face_left_top: false,
-            face_left_bottom: false,
-            face_right_top: false,
-            face_right_bottom: false,
+            dpad_north: false,
+            dpad_east: false,
+            dpad_west: false,
+            dpad_south: false,
+            face_top_left: false,
+            face_bottom_left: false,
+            face_top_right: false,
+            face_bottom_right: false,
             l_stick: (0f32, 0f32),
             r_stick: (0f32, 0f32),
             unknown: Vec::new(),

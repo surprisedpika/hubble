@@ -83,15 +83,15 @@ impl Procon {
             r_stick_click: data.get_bit(Procon::RStick),
             l_stick_click: data.get_bit(Procon::LStick),
 
-            d_up: dpad.0,
-            d_down: dpad.1,
-            d_left: dpad.2,
-            d_right: dpad.3,
+            dpad_north: dpad.0,
+            dpad_south: dpad.1,
+            dpad_west: dpad.2,
+            dpad_east: dpad.3,
 
-            face_left_top: data.get_bit(Procon::Plus),
-            face_left_bottom: data.get_bit(Procon::Home),
-            face_right_top: data.get_bit(Procon::Minus),
-            face_right_bottom: data.get_bit(Procon::Screenshot),
+            face_top_left: data.get_bit(Procon::Plus),
+            face_bottom_left: data.get_bit(Procon::Home),
+            face_top_right: data.get_bit(Procon::Minus),
+            face_bottom_right: data.get_bit(Procon::Screenshot),
             l_stick: Procon::get_stick_data(data, true),
             r_stick: Procon::get_stick_data(data, false),
 
