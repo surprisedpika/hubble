@@ -52,6 +52,7 @@ export default function Wrapper() {
 
   return (
     <div>
+      {/* Can ignore "dangerous" as the css is user-defined and the app does not connect to a server */}
       <style dangerouslySetInnerHTML={{ __html: style }} />
       {layout && style && <Keys layout={layout} />}
       <button onClick={() => getLayout()} className={styles.button}>

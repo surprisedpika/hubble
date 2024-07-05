@@ -41,6 +41,7 @@ export default function Keys(props: props) {
             setUnknownKey(key);
           }
           if (localPressedKeys.has(key)) {
+            // Edge case handling: The key began being pressed when the window was in focus, but ceased to be pressed when the window was not in focus
             setLocalPressedKeys((before) => {
               before.delete(key);
               return before;
@@ -63,6 +64,7 @@ export default function Keys(props: props) {
     };
     const keyupCallback = (e: KeyboardEvent) => {
       const k = localToGlobalKey(e.code);
+      // Edge case handling: The key began being pressed when the window was not in focus, but ceased to be pressed when the window was in focus
       if (globalPressedKeys.has(k)) {
         invoke<undefined>("unstick_key", { key: k });
       }

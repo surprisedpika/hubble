@@ -1,10 +1,9 @@
 use crate::{ controllers::{ procon::Procon, steaminput::SteamInput }, get_controller };
 
 pub trait GetBit {
-    /**
-     *  Returns the bit at the index `n`, which can range from `0 - (num_bits - 1)`
-     *  When `n = 0`, the **least significant** bit is returned. When it is `(num_bits - 1)`, the most significant bit is returned.
-    */
+    /** Returns the bit at the index `n`, which can range from `0 - (num_bits - 1)`<br/> 
+        When `n = 0`, the **least significant** bit is returned. When it is `(num_bits - 1)`, the most significant bit is returned.
+     */
     fn get_bit<T: Into<u8>>(&self, n: T) -> bool;
 }
 
@@ -22,6 +21,8 @@ impl GetBit for u8 {
     }
 }
 
+/** Generic controller struct all other controllers are converted into
+ */
 #[derive(Clone, serde::Serialize)]
 pub struct Controller {
     pub north: bool,

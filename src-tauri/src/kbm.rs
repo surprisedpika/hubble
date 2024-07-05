@@ -19,26 +19,29 @@ pub fn start() {
                 keys.write().unwrap().remove(&format!("ms_{:?}", button));
             }
             rdev::EventType::Wheel { delta_x, delta_y } => {
+                // Give vertical scrolls priority as they are far more common
                 if delta_y != 0 {
                     if delta_y > 0 {
                         keys.write().unwrap().insert(String::from("mw_Up"));
-                        return;
                     } else {
                         keys.write().unwrap().insert(String::from("mw_Down"));
-                        return;
-                    }
-                } else if delta_x != 0 {
-                    if delta_x > 0 {
-                        keys.write().unwrap().insert(String::from("mw_Right"));
-                        return;
-                    } else {
-                        keys.write().unwrap().insert(String::from("mw_Left"));
-                        return;
                     }
                 }
-                keys.write().unwrap().insert(String::from("mw_Unknown"));
+                if delta_x != 0 {
+                    if delta_x > 0 {
+                        keys.write().unwrap().insert(String::from("mw_Right"));
+                    } else {
+                        keys.write().unwrap().insert(String::from("mw_Left"));
+                    }
+                } else {
+                    if delta_y == 0 {
+                        // Edge case: Wheel was scrolled but not in X or Y direction
+                        // Should be impossible, but it's there just in case
+                        keys.write().unwrap().insert(String::from("mw_Unknown"));
+                    }
+                }
             }
-            _ => {}
+            _ => {} // Mouse move event (unsupported)
         }
     };
 
