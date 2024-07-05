@@ -103,24 +103,26 @@ pub fn start() {
         let procon = api.open(vid as u16, pid as u16);
         if let Ok(ref device) = procon {
             let mut buf = [0u8; 16];
-            let res = device.read_timeout(&mut buf[..], 3000).unwrap();
-            let data_arr: &[u8] = &buf[..res];
-            let mut data: u128 = 0;
-            for byte in data_arr.iter().rev() {
-                // print!("{:08b} ", byte);
-                data = (data << 8) | (*byte as u128);
+            let result = device.read_timeout(&mut buf[..], 3000);
+            if let Ok(res) = result {
+                let data_arr: &[u8] = &buf[..res];
+                let mut data: u128 = 0;
+                for byte in data_arr.iter().rev() {
+                    // print!("{:08b} ", byte);
+                    data = (data << 8) | (*byte as u128);
+                }
+                // print!("\n");
+                let controller = &get_controller();
+                let mut writeable_controller = controller.write().unwrap();
+                // This is very scientific dont worry about it
+                let is_steaminput = (data << 124) == 0;
+                let controller_data = if is_steaminput {
+                    SteamInput::from_bytes(data)
+                } else {
+                    Procon::from_bytes(data)
+                };
+                *writeable_controller = controller_data;
             }
-            // print!("\n");
-            let controller = &get_controller();
-            let mut writeable_controller = controller.write().unwrap();
-            // This is very scientific dont worry about it
-            let is_steaminput = (data << 124) == 0;
-            let controller_data = if is_steaminput {
-                SteamInput::from_bytes(data)
-            } else {
-                Procon::from_bytes(data)
-            };
-            *writeable_controller = controller_data;
         }
     }
 }
