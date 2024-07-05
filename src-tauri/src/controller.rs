@@ -21,6 +21,14 @@ impl GetBit for u8 {
     }
 }
 
+enum VID {
+    Nintendo = 0x057e
+}
+
+enum PID {
+    ProCon = 0x2009
+}
+
 /** Generic controller struct all other controllers are converted into
  */
 #[derive(Clone, serde::Serialize)]
@@ -86,12 +94,9 @@ impl Controller {
 pub fn start() {
     println!("Controller listening started");
 
-    // pro con vendor id: 1406 (0x057E)
-    // pro con product id: 8201 (0x2009)
-
     let api = hidapi::HidApi::new().unwrap();
-    let (procon_vid, procon_pid) = (0x057e, 0x2009);
-    let procon = api.open(procon_vid, procon_pid);
+    let (vid, pid) = (VID::Nintendo, PID::ProCon);
+    let procon = api.open(vid as u16, pid as u16);
 
     if let Ok(ref device) = procon {
         println!("Controller Found");
