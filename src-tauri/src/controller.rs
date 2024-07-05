@@ -1,4 +1,8 @@
-use crate::{ controllers::{ procon::Procon, steaminput::SteamInput }, get_controller };
+use crate::{
+    controllers::{ procon::Procon, steaminput::SteamInput },
+    get_controller,
+    get_controller_polling_state,
+};
 
 pub trait GetBit {
     /** Returns the bit at the index `n`, which can range from `0 - (num_bits - 1)`<br/> 
@@ -97,10 +101,10 @@ pub fn start() {
     println!("Controller listening started");
 
     let api = hidapi::HidApi::new().unwrap();
-
-    loop {
-        let (vid, pid) = (VID::Nintendo, PID::ProCon);
-        let open_device = api.open(vid as u16, pid as u16);
+    let (vid, pid) = (VID::Nintendo as u16, PID::ProCon as u16);
+    while get_controller_polling_state().read().unwrap().clone() == true {
+        println!("Polling...");
+        let open_device = api.open(vid, pid);
         if let Ok(ref device) = open_device {
             let mut buf = [0u8; 16];
             let result = device.read_timeout(&mut buf[..], 3000);
@@ -125,3 +129,21 @@ pub fn start() {
         }
     }
 }
+
+/*
+Currently:
+    - App starts
+    - Calls controller::start
+    - Controller::start loops until app ends
+
+Problems:
+    - Can't change current controller
+    - Can't stop / start loop based on layout
+
+Solution:
+    - Global bool
+    - In JS, have function that either:
+        - calls controller::start with controller type
+            - if global bool is true, stops loop and restarts
+        - sets global bool to false, stopping controller::start
+*/

@@ -2,7 +2,7 @@ use crate::controller::{ Controller, GetBit };
 
 #[derive(Clone, Copy)]
 pub enum SteamInput {
-    // This might actually be xinput or it might be steaminput but only for procons who knows
+    // This might only work for steam controllers or it might generalise I don't know
 
     // 0 - 7: Always (?) 0b0
     // 8 - 15: As above

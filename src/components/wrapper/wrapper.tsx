@@ -44,7 +44,13 @@ export default function Wrapper() {
         }
         const [json, css, path] = res;
         localStorage.setItem(LAYOUT_PATH, path);
-        setLayout(JSON.parse(json));
+        const newLayout = JSON.parse(json) as LayoutData;
+        setLayout(newLayout);
+        if (newLayout.controller == true) {
+          invoke("start_controller_polling");
+        } else {
+          invoke("stop_controller_polling");
+        }
         setStyle(css);
       })
       .catch(console.error);

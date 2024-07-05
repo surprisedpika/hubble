@@ -13,6 +13,7 @@ mod controllers;
 
 static KEYS: OnceLock<Arc<RwLock<HashSet<String>>>> = OnceLock::new();
 static CONTROLLER: OnceLock<Arc<RwLock<Controller>>> = OnceLock::new();
+pub static SHOULD_POLL_CONTROLLER: OnceLock<Arc<RwLock<bool>>> = OnceLock::new();
 
 fn main() {
     tauri::Builder
@@ -21,12 +22,18 @@ fn main() {
             std::thread::spawn(move || {
                 kbm::start();
             });
-            std::thread::spawn(move || {
-                controller::start();
-            });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![keys, get_layout, unstick_key, controller])
+        .invoke_handler(
+            tauri::generate_handler![
+                keys,
+                get_layout,
+                unstick_key,
+                controller,
+                start_controller_polling,
+                stop_controller_polling
+            ]
+        )
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -93,9 +100,31 @@ pub fn get_controller() -> Arc<RwLock<Controller>> {
     Arc::clone(CONTROLLER.get_or_init(|| Arc::new(RwLock::new(Controller::new()))))
 }
 
+pub fn get_controller_polling_state() -> Arc<RwLock<bool>> {
+    Arc::clone(SHOULD_POLL_CONTROLLER.get_or_init(|| Arc::new(RwLock::new(false))))
+}
+
 #[tauri::command]
 fn controller() -> Controller {
     let arc_rwlock_clone = Arc::clone(&get_controller());
     let controller = arc_rwlock_clone.read().unwrap();
     controller.clone()
+}
+
+#[tauri::command]
+fn stop_controller_polling() {
+    let state = get_controller_polling_state();
+    *state.write().unwrap() = false;
+}
+
+#[tauri::command]
+fn start_controller_polling() {
+    let state = get_controller_polling_state();
+    if *state.read().unwrap() == false {
+        stop_controller_polling();
+    }
+    *state.write().unwrap() = true;
+    std::thread::spawn(move || {
+        controller::start();
+    });
 }
