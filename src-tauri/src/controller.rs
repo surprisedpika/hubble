@@ -22,11 +22,13 @@ impl GetBit for u8 {
 }
 
 enum VID {
-    Nintendo = 0x057e
+    Nintendo = 0x057e,
+    Sony = 0x054c,
+    Microsoft = 0x045e,
 }
 
 enum PID {
-    ProCon = 0x2009
+    ProCon = 0x2009,
 }
 
 /** Generic controller struct all other controllers are converted into
@@ -95,12 +97,11 @@ pub fn start() {
     println!("Controller listening started");
 
     let api = hidapi::HidApi::new().unwrap();
-    let (vid, pid) = (VID::Nintendo, PID::ProCon);
-    let procon = api.open(vid as u16, pid as u16);
 
-    if let Ok(ref device) = procon {
-        println!("Controller Found");
-        loop {
+    loop {
+        let (vid, pid) = (VID::Nintendo, PID::ProCon);
+        let procon = api.open(vid as u16, pid as u16);
+        if let Ok(ref device) = procon {
             let mut buf = [0u8; 16];
             let res = device.read_timeout(&mut buf[..], 3000).unwrap();
             let data_arr: &[u8] = &buf[..res];
