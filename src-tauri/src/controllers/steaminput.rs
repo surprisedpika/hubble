@@ -5,8 +5,8 @@ pub enum SteamInput {
     // This might actually be xinput or it might be steaminput but only for procons who knows
 
     // 0 - 7: Always (?) 0b0
-    // 8 - 15: """
-    // 16 - 23: """
+    // 8 - 15: As above
+    // 16 - 23: As above
     // 24-31: Always (?) 0b1011
 
     // 32-55: rstick

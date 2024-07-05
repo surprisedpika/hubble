@@ -69,14 +69,14 @@ pub fn get_keys() -> Arc<RwLock<HashSet<String>>> {
 
 #[tauri::command]
 fn keys() -> Vec<String> {
-    let keys = get_keys() //get the arc
+    let k = get_keys();
+    let keys = k //get the arc
         .read()
         .unwrap() // deref the arc and acquire read lock
         .iter() // make an iterator from the set
         .cloned() // clone each element
         .collect::<Vec<_>>();
-    get_keys() // Clear any mouse wheel events
-        .write()
+    k.write() // Clear any mouse wheel events
         .unwrap()
         .retain(|k| !k.starts_with("mw_"));
     keys
