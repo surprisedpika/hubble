@@ -1,4 +1,4 @@
-use hidapi::{ HidApi, HidDevice, HidError };
+use hidapi::HidApi;
 
 use crate::{
     controllers::{ procon::Procon, steaminput::SteamInput },
