@@ -36,8 +36,12 @@ pub enum Procon {
 }
 
 impl Procon {
-    // No, I don't know why nintendo did it this way either
     fn decode_dpad(data: u128) -> (bool, bool, bool, bool) {
+        /*
+            The procon dpad data is encoded as a sort of vector, where after reversing the bits, 
+            a value of `0` means up is being pressed, `1` means up right, `2` means right, etc. 
+            until `7` loops around to meaning up left. A value of `8` means there is no dpad input
+        */
         let mut dpad_bits: u8 = 0;
         dpad_bits |= data.get_bit(24) as u8;
         dpad_bits |= (data.get_bit(25) as u8) << 1;
@@ -55,6 +59,8 @@ impl Procon {
         }
     }
 
+    /** Converts the 4 bytes of stick data to two `f32`s ranging from -1 to 1
+     */
     fn get_stick_data(data: u128, left: bool) -> (f32, f32) {
         let offset = if left { 4 } else { 8 };
         let bytes = data.to_le_bytes();

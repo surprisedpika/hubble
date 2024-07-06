@@ -45,17 +45,17 @@ pub enum SteamInput {
 }
 
 impl SteamInput {
+    /** Converts the 3 bytes of stick data to two `f32`s ranging from -1 to 1
+     */
     fn get_stick_data(data: u128, left: bool) -> (f32, f32) {
         let offset = if left { 7 } else { 4 };
         let bytes = data.to_le_bytes();
         let data = &bytes[offset..offset + 3];
 
         // data is an array of the 3 bytes that store the stick data
-        // data[0].reverse_bits() Ranges from 0 (bottom) to 256 (top)
         let first_byte_y = data[0].reverse_bits();
-        // This might be the wrong way round
         let second_byte_y = (data[1] & 0b00001111).reverse_bits() >> 4;
-        // 12 bit unsigned integer (ranges from 0 > 4096)
+        // y_component & x_component are `uint12`s (ranging from 0 > 4096)
         let y_component: u16 = ((first_byte_y as u16) << 4) | (second_byte_y as u16);
         let y: f32 = -(((y_component as f32) - 2048f32) / 2048f32);
 

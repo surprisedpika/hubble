@@ -19,7 +19,6 @@ pub fn start() {
                 keys.write().unwrap().remove(&format!("ms_{:?}", button));
             }
             rdev::EventType::Wheel { delta_x, delta_y } => {
-                // Give vertical scrolls priority as they are far more common
                 if delta_y != 0 {
                     if delta_y > 0 {
                         keys.write().unwrap().insert(String::from("mw_Up"));
