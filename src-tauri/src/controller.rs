@@ -1,3 +1,5 @@
+use hidapi::{ HidApi, HidDevice, HidError };
+
 use crate::{
     controllers::{ procon::Procon, steaminput::SteamInput },
     get_controller,
@@ -25,14 +27,32 @@ impl GetBit for u8 {
     }
 }
 
-enum VID {
-    Nintendo = 0x057e,
-    Sony = 0x054c,
-    Microsoft = 0x045e,
+#[derive(Clone)]
+enum Vendor {
+    Nintendo,
+    Sony,
+    Microsoft,
 }
 
-enum PID {
-    ProCon = 0x2009,
+impl Vendor {
+    fn id(&self) -> u16 {
+        match self {
+            Vendor::Nintendo => 0x057e,
+            Vendor::Sony => 0x054c,
+            Vendor::Microsoft => 0x045e,
+        }
+    }
+
+    fn product_ids(&self) -> Vec<u16> {
+        match self {
+            Vendor::Nintendo => vec![0x2009],
+            _ => Vec::new(),
+        }
+    }
+
+    fn iter() -> impl Iterator<Item = Vendor> {
+        [Vendor::Nintendo, Vendor::Sony, Vendor::Microsoft].iter().cloned()
+    }
 }
 
 /** Generic controller struct all other controllers are converted into
@@ -97,52 +117,58 @@ impl Controller {
     }
 }
 
+/** Iterates through every known controller device and attempts to open one of them.<br>
+    Returns the first device it finds, or an error if it finds none
+*/
+fn get_ids(api: &HidApi) -> Option<(u16, u16)> {
+    let vendors = Vendor::iter();
+    for vendor in vendors {
+        let product_ids = vendor.product_ids();
+        let pids = product_ids.iter();
+        for pid in pids {
+            let device = api.open(vendor.id(), *pid);
+            if let Ok(_) = device {
+                println!("Controller found");
+                return Some((vendor.id(), *pid));
+            }
+        }
+    }
+    None
+}
+
 pub fn start() {
     println!("Controller listening started");
 
     let api = hidapi::HidApi::new().unwrap();
-    let (vid, pid) = (VID::Nintendo as u16, PID::ProCon as u16);
+    let mut ids: Option<(u16, u16)> = get_ids(&api);
     while get_controller_polling_state().read().unwrap().clone() == true {
-        let open_device = api.open(vid, pid);
-        if let Ok(ref device) = open_device {
-            let mut buf = [0u8; 16];
-            let result = device.read_timeout(&mut buf[..], 3000);
-            // Device was unplugged
-            if let Ok(res) = result {
-                let data_arr: &[u8] = &buf[..res];
-                let mut data: u128 = 0;
-                for byte in data_arr.iter().rev() {
-                    data = (data << 8) | (*byte as u128);
+        if let Some(ok_ids) = ids {
+            if let Ok(ref device) = api.open(ok_ids.0, ok_ids.1) {
+                let mut buf = [0u8; 16];
+                let result = device.read_timeout(&mut buf[..], 3000);
+                // Device was unplugged
+                if let Ok(res) = result {
+                    let data_arr: &[u8] = &buf[..res];
+                    let mut data: u128 = 0;
+                    for byte in data_arr.iter().rev() {
+                        data = (data << 8) | (*byte as u128);
+                    }
+                    // This is very scientific dont worry about it
+                    let is_steaminput = (data << 124) == 0;
+                    let controller_data = if is_steaminput {
+                        SteamInput::from_bytes(data)
+                    } else {
+                        Procon::from_bytes(data)
+                    };
+                    let controller = &get_controller();
+                    let mut writeable_controller = controller.write().unwrap();
+                    *writeable_controller = controller_data;
                 }
-                // This is very scientific dont worry about it
-                let is_steaminput = (data << 124) == 0;
-                let controller_data = if is_steaminput {
-                    SteamInput::from_bytes(data)
-                } else {
-                    Procon::from_bytes(data)
-                };
-                let controller = &get_controller();
-                let mut writeable_controller = controller.write().unwrap();
-                *writeable_controller = controller_data;
+            } else {
+                ids = get_ids(&api);
             }
+        } else {
+            ids = get_ids(&api);
         }
     }
 }
-
-/*
-Currently:
-    - App starts
-    - Calls controller::start
-    - Controller::start loops until app ends
-
-Problems:
-    - Can't change current controller
-    - Can't stop / start loop based on layout
-
-Solution:
-    - Global bool
-    - In JS, have function that either:
-        - calls controller::start with controller type
-            - if global bool is true, stops loop and restarts
-        - sets global bool to false, stopping controller::start
-*/
