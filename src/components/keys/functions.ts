@@ -49,7 +49,6 @@ export function localToGlobalKey(key: string): string {
     return "kb_Alt";
   }
   if (key == "AltRight") {
-    //! AltGr presses seem to come with a phantom ControlLeft press
     return "kb_AltGr";
   }
   // Turn BracketLeft to kb_LeftBracket
