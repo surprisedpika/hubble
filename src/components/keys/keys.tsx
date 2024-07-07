@@ -59,16 +59,23 @@ export default function Keys(props: props) {
     const syncClock = setInterval(sync, 50);
 
     const keydownCallback = (e: KeyboardEvent) => {
+      e.preventDefault();
+      console.log(e.code);
       const k = localToGlobalKey(e.code);
+      // if (k === "kb_Alt") {console.log(`Pressed ${k}`)};
       setLocalPressedKeys((before) => before.add(k));
     };
     const keyupCallback = (e: KeyboardEvent) => {
+      // console.log(e.code);
       const k = localToGlobalKey(e.code);
+      // console.log(k);
       // Edge case handling: The key began being pressed when the window was not in focus, but ceased to be pressed when the window was in focus
       if (globalPressedKeys.has(k)) {
+        // console.log("Was stuck");
         invoke<undefined>("unstick_key", { key: k });
       }
       setLocalPressedKeys((before) => {
+        // console.log(before.has(k));
         before.delete(k);
         return before;
       });

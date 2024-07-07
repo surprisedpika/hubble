@@ -45,9 +45,12 @@ export function localToGlobalKey(key: string): string {
   if (key.startsWith("Digit")) {
     return key.replace("Digit", "kb_Num");
   }
-  // AltGr, etc. etc.
-  if (key.startsWith("Alt")) {
+  if (key == "AltLeft") {
     return "kb_Alt";
+  }
+  if (key == "AltRight") {
+    //! AltGr presses seem to come with a phantom ControlLeft press
+    return "kb_AltGr";
   }
   // Turn BracketLeft to kb_LeftBracket
   if (key.startsWith("Bracket")) {
@@ -83,7 +86,7 @@ export function localToGlobalKey(key: string): string {
 }
 
 /**
- * @param b Name of key as defined in `layout.json` 
+ * @param b Name of key as defined in `layout.json`
  * @param controller Current controller state
  */
 function isControllerButtonPressed(b: string, controller: Controller) {
@@ -136,9 +139,11 @@ export function isKeyPressed(
   } else {
     if (
       keys.some((key) => {
-        return globalPressedKeys.has(key) ||
+        return (
+          globalPressedKeys.has(key) ||
           localPressedKeys.has(key) ||
-          (controller !== null && isControllerButtonPressed(key, controller));
+          (controller !== null && isControllerButtonPressed(key, controller))
+        );
       })
     ) {
       return true;

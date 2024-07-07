@@ -3,156 +3,218 @@
   "controller": false,
   "keys": [
     {
+      "label": "1",
+      "keys": "kb_Num1",
+      "classes": "normal row-0 col-0"
+    },
+    {
+      "label": "2",
+      "keys": "kb_Num2",
+      "classes": "normal row-0 col-1"
+    },
+    {
+      "label": "3",
+      "keys": "kb_Num3",
+      "classes": "normal row-0 col-2"
+    },
+    {
+      "label": "4",
+      "keys": "kb_Num4",
+      "classes": "normal row-0 col-3"
+    },
+    {
+      "label": "5",
+      "keys": "kb_Num5",
+      "classes": "normal row-0 col-4"
+    },
+    {
+      "label": "6",
+      "keys": "kb_Num6",
+      "classes": "normal row-0 col-5"
+    },
+    {
+      "label": "7",
+      "keys": "kb_Num7",
+      "classes": "normal row-0 col-6"
+    },
+    {
+      "label": "8",
+      "keys": "kb_Num8",
+      "classes": "normal row-0 col-7"
+    },
+    {
+      "label": "9",
+      "keys": "kb_Num9",
+      "classes": "normal row-0 col-8"
+    },
+    {
+      "label": "0",
+      "keys": "kb_Num0",
+      "classes": "normal row-0 col-9"
+    },
+
+    {
       "label": "Q",
       "keys": "kb_KeyQ",
-      "classes": "normal row-0 col-0"
+      "classes": "normal row-1 col-0"
     },
     {
       "label": "W",
       "keys": "kb_KeyW",
-      "classes": "normal row-0 col-1"
+      "classes": "normal row-1 col-1"
     },
     {
       "label": "E",
       "keys": "kb_KeyE",
-      "classes": "normal row-0 col-2"
+      "classes": "normal row-1 col-2"
     },
     {
       "label": "R",
       "keys": "kb_KeyR",
-      "classes": "normal row-0 col-3"
+      "classes": "normal row-1 col-3"
     },
     {
       "label": "T",
       "keys": "kb_KeyT",
-      "classes": "normal row-0 col-4"
+      "classes": "normal row-1 col-4"
     },
     {
       "label": "Y",
       "keys": "kb_KeyY",
-      "classes": "normal row-0 col-5"
+      "classes": "normal row-1 col-5"
     },
     {
       "label": "U",
       "keys": "kb_KeyU",
-      "classes": "normal row-0 col-6"
+      "classes": "normal row-1 col-6"
     },
     {
       "label": "I",
       "keys": "kb_KeyI",
-      "classes": "normal row-0 col-7"
+      "classes": "normal row-1 col-7"
     },
     {
       "label": "O",
       "keys": "kb_KeyO",
-      "classes": "normal row-0 col-8"
+      "classes": "normal row-1 col-8"
     },
     {
       "label": "P",
       "keys": "kb_KeyP",
-      "classes": "normal row-0 col-9"
+      "classes": "normal row-1 col-9"
     },
 
     {
       "label": "A",
       "keys": "kb_KeyA",
-      "classes": "normal row-1 col-0"
+      "classes": "normal row-2 col-0"
     },
     {
       "label": "S",
       "keys": "kb_KeyS",
-      "classes": "normal row-1 col-1"
+      "classes": "normal row-2 col-1"
     },
     {
       "label": "D",
       "keys": "kb_KeyD",
-      "classes": "normal row-1 col-2"
+      "classes": "normal row-2 col-2"
     },
     {
       "label": "F",
       "keys": "kb_KeyF",
-      "classes": "normal row-1 col-3"
+      "classes": "normal row-2 col-3"
     },
     {
       "label": "G",
       "keys": "kb_KeyG",
-      "classes": "normal row-1 col-4"
+      "classes": "normal row-2 col-4"
     },
     {
       "label": "H",
       "keys": "kb_KeyH",
-      "classes": "normal row-1 col-5"
+      "classes": "normal row-2 col-5"
     },
     {
       "label": "J",
       "keys": "kb_KeyJ",
-      "classes": "normal row-1 col-6"
+      "classes": "normal row-2 col-6"
     },
     {
       "label": "K",
       "keys": "kb_KeyK",
-      "classes": "normal row-1 col-7"
+      "classes": "normal row-2 col-7"
     },
     {
       "label": "L",
       "keys": "kb_KeyL",
-      "classes": "normal row-1 col-8"
+      "classes": "normal row-2 col-8"
     },
     {
       "label": ";",
       "keys": "kb_SemiColon",
-      "classes": "normal row-1 col-9"
+      "classes": "normal row-2 col-9"
     },
 
     {
-      "label": "\\",
-      "keys": ["kb_BackSlash", "kb_IntlBackSlash"],
-      "classes": "normal row-2 col-0"
-    },
-    {
       "label": "Z",
       "keys": "kb_KeyZ",
-      "classes": "normal row-2 col-1"
+      "classes": "normal row-3 col-0"
     },
     {
       "label": "X",
       "keys": "kb_KeyX",
-      "classes": "normal row-2 col-2"
+      "classes": "normal row-3 col-1"
     },
     {
       "label": "C",
       "keys": "kb_KeyC",
-      "classes": "normal row-2 col-3"
+      "classes": "normal row-3 col-2"
     },
     {
       "label": "V",
       "keys": "kb_KeyV",
-      "classes": "normal row-2 col-4"
+      "classes": "normal row-3 col-3"
     },
     {
       "label": "B",
       "keys": "kb_KeyB",
-      "classes": "normal row-2 col-5"
+      "classes": "normal row-3 col-4"
     },
     {
       "label": "N",
       "keys": "kb_KeyN",
-      "classes": "normal row-2 col-6"
+      "classes": "normal row-3 col-5"
     },
     {
       "label": "M",
       "keys": "kb_KeyM",
-      "classes": "normal row-2 col-7"
+      "classes": "normal row-3 col-6"
     },
     {
       "label": ",",
       "keys": "kb_Comma",
-      "classes": "normal row-2 col-8"
+      "classes": "normal row-3 col-7"
     },
     {
       "label": ".",
       "keys": "kb_Dot",
-      "classes": "normal row-2 col-9"
+      "classes": "normal row-3 col-8"
+    },
+    {
+      "label": "/",
+      "keys": "kb_Slash",
+      "classes": "normal row-3 col-9"
+    },
+
+    {
+      "label": "ALT",
+      "keys": "kb_Alt",
+      "classes": "normal row-4 col-0"
+    },
+    {
+      "label": " ",
+      "keys": "kb_Space",
+      "classes": "normal row-4 col-1"
     }
   ]
 }

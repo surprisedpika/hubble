@@ -33,10 +33,16 @@
   border: round(1.8px, 1px) solid var(--color);
 }
 .normal:nth-child(n+11):nth-child(-n+20) {
-  --extra-offset: calc(1 * 2.4rem);
+  --extra-offset: calc(1 * 1.8rem);
 }
 .normal:nth-child(n+21):nth-child(-n+30) {
-  --extra-offset: calc(2 * 2.4rem);
+  --extra-offset: calc(2 * 1.8rem);
+}
+.normal:nth-child(n+31):nth-child(-n+40) {
+  --extra-offset: calc(3 * 1.8rem);
+}
+.normal:nth-child(n+41):nth-child(-n+50) {
+  --extra-offset: calc(4 * 1.8rem);
 }
 .normal:nth-child(1) {
   z-index: 99;
@@ -128,57 +134,130 @@
 .normal:nth-child(30) {
   z-index: 90;
 }
+.normal:nth-child(31) {
+  z-index: 99;
+}
+.normal:nth-child(32) {
+  z-index: 98;
+}
+.normal:nth-child(33) {
+  z-index: 97;
+}
+.normal:nth-child(34) {
+  z-index: 96;
+}
+.normal:nth-child(35) {
+  z-index: 95;
+}
+.normal:nth-child(36) {
+  z-index: 94;
+}
+.normal:nth-child(37) {
+  z-index: 93;
+}
+.normal:nth-child(38) {
+  z-index: 92;
+}
+.normal:nth-child(39) {
+  z-index: 91;
+}
+.normal:nth-child(40) {
+  z-index: 90;
+}
+.normal:nth-child(41) {
+  z-index: 99;
+}
+.normal:nth-child(42) {
+  z-index: 98;
+}
+.normal:nth-child(43) {
+  z-index: 97;
+}
+.normal:nth-child(44) {
+  z-index: 96;
+}
+.normal:nth-child(45) {
+  z-index: 95;
+}
+.normal:nth-child(46) {
+  z-index: 94;
+}
+.normal:nth-child(47) {
+  z-index: 93;
+}
+.normal:nth-child(48) {
+  z-index: 92;
+}
+.normal:nth-child(49) {
+  z-index: 91;
+}
+.normal:nth-child(50) {
+  z-index: 90;
+}
 
 .col-0 {
-  left: 150px;
+  left: calc(150px + var(--row-offset, 0));
 }
 
 .col-1 {
-  left: 189px;
+  left: calc(189px + var(--row-offset, 0));
 }
 
 .col-2 {
-  left: 228px;
+  left: calc(228px + var(--row-offset, 0));
 }
 
 .col-3 {
-  left: 267px;
+  left: calc(267px + var(--row-offset, 0));
 }
 
 .col-4 {
-  left: 306px;
+  left: calc(306px + var(--row-offset, 0));
 }
 
 .col-5 {
-  left: 345px;
+  left: calc(345px + var(--row-offset, 0));
 }
 
 .col-6 {
-  left: 384px;
+  left: calc(384px + var(--row-offset, 0));
 }
 
 .col-7 {
-  left: 423px;
+  left: calc(423px + var(--row-offset, 0));
 }
 
 .col-8 {
-  left: 462px;
+  left: calc(462px + var(--row-offset, 0));
 }
 
 .col-9 {
-  left: 501px;
+  left: calc(501px + var(--row-offset, 0));
 }
 
 .row-0 {
+  --row-offset: 0rem;
   top: 195px;
 }
 
 .row-1 {
-  top: 255px;
+  --row-offset: 0.72rem;
+  top: 246px;
 }
 
 .row-2 {
-  top: 315px;
+  --row-offset: 1.44rem;
+  top: 297px;
+}
+
+.row-3 {
+  --row-offset: 2.16rem;
+  top: 348px;
+}
+
+.row-4 {
+  --row-offset: 2.88rem;
+  top: 399px;
 }
 
 .pressed {
