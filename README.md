@@ -6,6 +6,10 @@ Hubble is an input viewer for Windows, MacOS, and Linux (probably).
 
 ![Controller Example](https://raw.githubusercontent.com/surprisedpika/hubble/master/github-assets/controller.gif)
 
+## Using Hubble
+
+Download Hubble from the releases page and open it. You will be prompted to select a folder, this folder should contain a `layout.css` and `layout.json` file. If you wish to work from an example, there are examples in the [Example Layouts](https://github.com/surprisedpika/hubble/tree/master/Example%20Layouts) folder.
+
 ## Layouts
 
 Layouts are stored in a `layout.json` file and `layout.css` file. The JSON has two properties, warnUnknown and keys.
@@ -227,7 +231,3 @@ The default styles for a key are as follows:
 ```
 
 There are no additional default styles for a pressed key.
-
-## Using Hubble
-
-Download Hubble from the releases page and open it. You will be prompted to select a folder, this is the layouts folder containing a `layout.css` and `layout.json` file. If you wish to work from an example, there are examples in the [Example Layouts](https://github.com/surprisedpika/hubble/tree/master/Example%20Layouts) folder.
