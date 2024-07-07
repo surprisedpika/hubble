@@ -202,7 +202,7 @@ Additionally, each key is given a `.pressed` class when the key is pressed.
 
 Currently, the only supported controller is the Nintendo Switch Pro Controller. Set the "controller" key to "switch_pro" in layout.json to enable controller polling.
 
-Due to control sticks being analog, they are seperately handled. Any key can access the custom properties `--l-stick-x`, `--l-stick-y`, `--r-stick-x`, and `--r-stick-y`. These values are all floats ranging from -1 to 1 (the exact maximum and minimum megnitude is almost always lower, as it depends on the exact hardware and configuration. I've found values typically won't surpass 0.75 / -0.75, but your mileage may vary). -1, -1 is at the top left. On most control sticks `sqrt(x * x + y * y)` will not exceed `sqrt(2)`.
+Due to control sticks being analog, they are seperately handled. Any key can access the custom properties `--l-stick-x`, `--l-stick-y`, `--r-stick-x`, and `--r-stick-y`. These values are all floats ranging from -1 to 1 (the exact maximum and minimum magnitude is almost always lower, as it depends on the exact hardware and configuration. I've found values typically won't surpass 0.75 / -0.75, but your mileage may vary). -1, -1 is at the top left. On most control sticks `sqrt(x * x + y * y)` will not exceed `sqrt(2)`.
 
 ## Styling
 
