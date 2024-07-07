@@ -51,7 +51,6 @@ export function localToGlobalKey(key: string): string {
   }
   // Turn BracketLeft to kb_LeftBracket
   if (key.startsWith("Bracket")) {
-    console.log(key.replace("Bracket", "kb_").concat("Bracket"));
     return key.replace("Bracket", "kb_").concat("Bracket");
   }
   if (key === "Backquote") {
@@ -137,7 +136,7 @@ export function isKeyPressed(
   } else {
     if (
       keys.some((key) => {
-        globalPressedKeys.has(key) ||
+        return globalPressedKeys.has(key) ||
           localPressedKeys.has(key) ||
           (controller !== null && isControllerButtonPressed(key, controller));
       })
