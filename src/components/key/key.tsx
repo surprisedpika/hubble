@@ -7,7 +7,7 @@ interface props {
   isPressed: boolean | null;
   posX: number | null;
   posY: number | null;
-  classes: string | string[] | null;
+  classes: string | null;
 }
 
 export default function Key(props: props) {
@@ -15,8 +15,6 @@ export default function Key(props: props) {
     `${styles.key} ${props.isPressed ? "pressed" : ""} ${
       typeof props.classes === "string"
         ? props.classes
-        : Array.isArray(props.classes)
-        ? props.classes.join(" ")
         : ""
     }`;
   return (

@@ -109,14 +109,14 @@
       "keys": "cb_r_stick_click",
       "posX": 500,
       "posY": 400,
-      "classes": ["normal", "stick", "r"]
+      "classes": "normal stick r"
     },
     {
       "label": " ",
       "keys": "cb_l_stick_click",
       "posX": 300,
       "posY": 400,
-      "classes": ["normal", "stick", "l"]
+      "classes": "normal stick l"
     }
   ]
 }

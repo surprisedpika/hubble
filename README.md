@@ -24,7 +24,7 @@ Layouts are stored in a `layout.json` file and `layout.css` file. The JSON has t
     "keys": string or string[],
     "posX": number,
     "posY": number,
-    "classes": string or string[]
+    "classes": string
   }[]
 }
 ```
@@ -224,7 +224,7 @@ The location of this key on the screen
 
 ### Classes
 
-A list of CSS classes applied to this key. The CSS classes are defined in the `layout.css` file.
+A list of CSS classes applied to this key, seperated by a space. The CSS classes are defined in the `layout.css` file.
 
 Additionally, each key is given a `.pressed` class when the key is pressed.
 

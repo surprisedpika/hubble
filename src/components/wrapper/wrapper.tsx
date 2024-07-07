@@ -14,7 +14,7 @@ export interface LayoutData {
     keys: string | string[];
     posX: number;
     posY: number;
-    classes: string | string[];
+    classes: string;
   }[];
 }
 
