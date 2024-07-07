@@ -55,6 +55,7 @@ There are 4 types of key:
 - Keyboard events, prefixed by `kb`
 - Controller events, prefixed by `cb`
 
+#### Mouse Wheel Events
 | Key Code             | Explanation                                                        |
 | -------------------- | ------------------------------------------------------------------ |
 | mw_Up                |                                                                    |
@@ -62,10 +63,16 @@ There are 4 types of key:
 | mw_Left              | Scrolling left (only supported by some mice)                       |
 | mw_Right             | Scrolling right (only supported by some mice)                      |
 | mw_Unknown           | Unknown wheel event                                                |
+#### Mouse Events
+| Key Code             | Explanation                                                        |
+| -------------------- | ------------------------------------------------------------------ |
 | ms_Left              |                                                                    |
 | ms_Middle            |                                                                    |
 | ms_Right             |                                                                    |
 | ms_Unknown(`x`)      | Unknown click event (`x` is a u8)                                  |
+#### Keyboard Events
+| Key Code             | Explanation                                                        |
+| -------------------- | ------------------------------------------------------------------ |
 | kb_Alt               | Alt on Linux and Windows, Option on MacOS                          |
 | kb_AltGr             |                                                                    |
 | kb_Backspace         |                                                                    |
@@ -172,6 +179,9 @@ There are 4 types of key:
 | kb_KpDelete          |                                                                    |
 | kb_Function          |                                                                    |
 | kb_Unknown(`x`)      | Unknown keyboard event (`x` is a u32)                              |
+#### Controller Events
+| Key Code             | Explanation                                                        |
+| -------------------- | ------------------------------------------------------------------ |
 | cb_north             | X on Switch, △ on Playstation, Y on Xbox                           |
 | cb_south             | B on Switch, X on Playstation, A on Xbox                           |
 | cb_east              | A on Switch, O on Playstation, B on Xbox                           |
