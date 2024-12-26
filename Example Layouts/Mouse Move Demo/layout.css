@@ -1,0 +1,10 @@
+.normal {
+  width: 1.5em;
+  height: 1.5em;
+  padding: 1em;
+  outline: 1px solid #eee;
+  border-radius: 100vmax;
+  background-color: red;
+  transition: background-color 100ms ease;
+  transform: translateX(calc(0.5px * var(--mouse-x, 0))) translateY(calc(0.5px * var(--mouse-y, 0)));
+}

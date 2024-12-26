@@ -83,7 +83,7 @@ fn keys() -> Vec<String> {
         .iter() // make an iterator from the set
         .cloned() // clone each element
         .collect::<Vec<_>>();
-    k.write() // Clear any mouse wheel events
+    k.write() // Clear any mouse wheel / move events
         .unwrap()
         .retain(|k| !k.starts_with("mw_"));
     keys

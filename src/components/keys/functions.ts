@@ -150,3 +150,30 @@ export function isKeyPressed(
   }
   return false;
 }
+
+export function getMousePos(keys: Set<string>): [number, number] {
+  const globalKeys = Array.from(keys);
+  let x = 0;
+  let y = 0;
+
+  for (let i = 0; i < globalKeys.length; i++) {
+    const key = globalKeys[i];
+    if (key.startsWith("mx_")) {
+      let value = key.substring(3);
+      x = Number.parseInt(value);
+      if (y !== 0) {
+        return [x, y];
+      }
+      continue;
+    }
+    if (key.startsWith("my_")) {
+      let value = key.substring(3);
+      y = Number.parseInt(value);
+      if (x !== 0) {
+        return [x, y];
+      }
+      continue;
+    }
+  }
+  return [x, y];
+}

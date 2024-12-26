@@ -50,5 +50,6 @@
 }
 
 .stick {
-  transform: translateX(calc(-50% + 40px * var(--stick-x))) translateY(calc(40px * var(--stick-y)));
+  transform: translateX(calc(-50% + 40px * var(--stick-x)))
+    translateY(calc(40px * var(--stick-y)));
 }

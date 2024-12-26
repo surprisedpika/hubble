@@ -1,0 +1,13 @@
+{
+  "warnUnknown": true,
+  "controller": false,
+  "keys": [
+    {
+      "label": " ",
+      "keys": [],
+      "posX": 0,
+      "posY": 0,
+      "classes": "normal"
+    }
+  ]
+}

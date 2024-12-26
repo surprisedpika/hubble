@@ -40,7 +40,13 @@ pub fn start() {
                     }
                 }
             }
-            _ => {} // Mouse move event (unsupported)
+            rdev::EventType::MouseMove { x, y } => {
+                keys.write()
+                    .unwrap()
+                    .retain(|k| !k.starts_with("mx_") && !k.starts_with("my_"));
+                keys.write().unwrap().replace(format!("mx_{:?}", x));
+                keys.write().unwrap().replace(format!("my_{:?}", y));
+            }
         }
     };
 

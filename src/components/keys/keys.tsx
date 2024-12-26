@@ -8,7 +8,12 @@ import styles from "./styles.module.scss";
 import Key from "@/components/key/key";
 import { LayoutData } from "@/components/wrapper/wrapper";
 import { listen } from "@tauri-apps/api/event";
-import { Controller, isKeyPressed, localToGlobalKey } from "./functions";
+import {
+  Controller,
+  getMousePos,
+  isKeyPressed,
+  localToGlobalKey,
+} from "./functions";
 
 interface props {
   layout: LayoutData | null;
@@ -23,6 +28,7 @@ export default function Keys(props: props) {
   );
   const [controller, setController] = useState<Controller | null>(null);
   const [unknownKey, setUnknownKey] = useState("");
+  const [mousePos, setMousePos] = useState<[number, number]>([0, 0]);
 
   useEffect(() => {
     if (props.layout?.controller) {
@@ -48,7 +54,9 @@ export default function Keys(props: props) {
             });
           }
         });
-        setGlobalPressedKeys(new Set(keys));
+        const keySet = new Set(keys);
+        setMousePos(getMousePos(keySet))
+        setGlobalPressedKeys(keySet);
       });
     };
 
@@ -60,7 +68,7 @@ export default function Keys(props: props) {
 
     const keydownCallback = (e: KeyboardEvent) => {
       e.preventDefault();
-      console.log(e.code);
+      // console.log(e.code);
       const k = localToGlobalKey(e.code);
       setLocalPressedKeys((before) => before.add(k));
     };
@@ -93,6 +101,8 @@ export default function Keys(props: props) {
       className={`${styles.keys} global`}
       style={
         {
+          "--mouse-x": `${mousePos[0]}`,
+          "--mouse-y": `${mousePos[1]}`,
           "--l-stick-x": `${
             props.layout?.controller ? controller?.l_stick[0] : 0
           }`,
