@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
+import { emit } from "@tauri-apps/api/event";
 
 import Keys from "@/components/keys/keys";
 
@@ -20,20 +21,26 @@ export interface LayoutData {
 
 const LAYOUT_PATH = "layoutPath";
 
-const openEditMode = async () => {
-  if (typeof window !== undefined) {
-    const { WebviewWindow } = await import("@tauri-apps/api/window");
-    const webview = new WebviewWindow("editmode", {
-      url: "editmode",
-    });
-    webview.show();
-  }
-}
-
 export default function Wrapper() {
   const [layout, setLayout] = useState<LayoutData | null>(null);
   const [style, setStyle] = useState<string>("");
   const hasInit = useRef(false);
+
+  const openEditMode = async () => {
+    if (typeof window !== undefined) {
+      const { WebviewWindow } = await import("@tauri-apps/api/window");
+      const webview = new WebviewWindow("editmode", {
+        url: "editmode",
+        title: "Edit Layout",
+      });
+      webview.once("tauri://created", () => {
+        setTimeout(() => {
+          console.log("emitting");
+          emit("layoutData", layout);
+        }, 1000);
+      });
+    }
+  };
 
   // Run on mount
   useEffect(() => {
@@ -44,7 +51,6 @@ export default function Wrapper() {
   }, []);
 
   const getLayout = async (path?: string) => {
-    console.log("hi");
     await invoke<[string, string, string] | null>("get_layout", {
       previousPath: path,
     })
@@ -73,10 +79,7 @@ export default function Wrapper() {
       <style dangerouslySetInnerHTML={{ __html: style }} />
       {layout && style && <Keys layout={layout} />}
       <div className={styles.controls}>
-        <button
-          className={styles.button}
-          onClick={() => openEditMode()}
-        >
+        <button className={styles.button} onClick={() => openEditMode()}>
           Edit Layout
         </button>
         <button onClick={() => getLayout()} className={styles.button}>
