@@ -2,6 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use std::fs;
 use std::path::PathBuf;
+use std::str::FromStr;
 use std::sync::{ Arc, OnceLock, RwLock };
 use std::collections::HashSet;
 use controller::Controller;
@@ -31,7 +32,8 @@ fn main() {
                 unstick_key,
                 controller,
                 start_controller_polling,
-                stop_controller_polling
+                stop_controller_polling,
+                set_layout
             ]
         )
         .run(tauri::generate_context!())
@@ -67,6 +69,22 @@ async fn get_layout(previous_path: Option<String>) -> Option<(String, String, St
         return Some((json, css, path_str));
     }
     return None;
+}
+
+#[tauri::command]
+async fn set_layout(data: String, path_str: String) {
+    if let Ok(path) = PathBuf::from_str(path_str.as_str()) {
+        let mut file_path = path.clone();
+
+        // Write json data
+        file_path.push("layout.json");
+        let _ = fs::write(file_path.clone(), data);
+
+        // Create css file if it doesn't exist
+        file_path.pop();
+        file_path.push("layout.css");
+        let _ = fs::OpenOptions::new().write(true).create_new(true).open(file_path);
+    };
 }
 
 // KBM
