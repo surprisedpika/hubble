@@ -27,6 +27,7 @@
     "typescript": "^5.7.2"
   },
   "trustedDependencies": [
-    "@parcel/watcher"
+    "@parcel/watcher",
+    "sharp"
   ]
 }

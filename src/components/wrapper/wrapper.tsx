@@ -20,6 +20,16 @@ export interface LayoutData {
 
 const LAYOUT_PATH = "layoutPath";
 
+const openEditMode = async () => {
+  if (typeof window !== undefined) {
+    const { WebviewWindow } = await import("@tauri-apps/api/window");
+    const webview = new WebviewWindow("editmode", {
+      url: "editmode",
+    });
+    webview.show();
+  }
+}
+
 export default function Wrapper() {
   const [layout, setLayout] = useState<LayoutData | null>(null);
   const [style, setStyle] = useState<string>("");
@@ -34,6 +44,7 @@ export default function Wrapper() {
   }, []);
 
   const getLayout = async (path?: string) => {
+    console.log("hi");
     await invoke<[string, string, string] | null>("get_layout", {
       previousPath: path,
     })
@@ -61,9 +72,17 @@ export default function Wrapper() {
       {/* Can ignore "dangerous" as the css is user-defined and the app does not connect to a server */}
       <style dangerouslySetInnerHTML={{ __html: style }} />
       {layout && style && <Keys layout={layout} />}
-      <button onClick={() => getLayout()} className={styles.button}>
-        Change Layout
-      </button>
+      <div className={styles.controls}>
+        <button
+          className={styles.button}
+          onClick={() => openEditMode()}
+        >
+          Edit Layout
+        </button>
+        <button onClick={() => getLayout()} className={styles.button}>
+          Change Layout
+        </button>
+      </div>
     </div>
   );
 }

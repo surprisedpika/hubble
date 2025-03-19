@@ -1,15 +1,19 @@
 .button {
   cursor: pointer;
-  position: fixed;
-  bottom: 0.2em;
-  right: 0.2em;
   padding: 0.3em 0.5em;
   background-color: #111;
   border: 1px solid #eee;
   border-radius: 0.5em;
   color: #eee;
+  margin-inline: 0.2em;
 
   &:hover {
     background-color: #222;
   }
+}
+
+.controls {
+  position: fixed;
+  bottom: 0.2em;
+  right: 0.2em;
 }
