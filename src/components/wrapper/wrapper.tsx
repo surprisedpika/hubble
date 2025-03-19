@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
-import { emit } from "@tauri-apps/api/event";
+import { emit, listen } from "@tauri-apps/api/event";
 
 import Keys from "@/components/keys/keys";
 
@@ -35,19 +35,29 @@ export default function Wrapper() {
       });
       webview.once("tauri://created", () => {
         setTimeout(() => {
-          console.log("emitting");
           emit("layoutData", layout);
         }, 1000);
       });
     }
   };
 
-  // Run on mount
   useEffect(() => {
-    if (hasInit.current) return;
-    hasInit.current = true;
-    const path = localStorage.getItem(LAYOUT_PATH);
-    getLayout(path ?? undefined);
+    if (hasInit.current === false) {
+      // Run on mount
+      hasInit.current = true;
+      const path = localStorage.getItem(LAYOUT_PATH);
+      getLayout(path ?? undefined);
+    }
+
+    if (typeof window !== undefined) {
+      const unlisten = listen("newLayout", (event) => {
+        setLayout(event.payload!);
+      });
+
+      return () => {
+        unlisten.then((fn) => fn());
+      };
+    }
   }, []);
 
   const getLayout = async (path?: string) => {

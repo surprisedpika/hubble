@@ -17,7 +17,6 @@ export default function Page() {
   useEffect(() => {
     if (typeof window !== undefined) {
       const unlisten = listen("layoutData", (event) => {
-        console.log("holy moly!");
         setLayout(event.payload!);
       });
 
