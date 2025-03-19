@@ -1,3 +1,50 @@
 .main {
-  margin-inline: 1em;
+  margin: 1em;
+
+  input[type="checkbox"] {
+    cursor: pointer;
+  }
+
+  table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    td input {
+      display: inline-block;
+      width: calc(100% - 8px);
+    }
+
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th:nth-child(1),
+    td:nth-child(1) {
+      width: 5em;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+      width: 3em;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3) {
+      width: 3em;
+    }
+
+    th:nth-child(4),
+    td:nth-child(4) {
+      width: 10em;
+    }
+
+    th:nth-child(5),
+    td:nth-child(5) {
+      width: 10em;
+    }
+  }
 }

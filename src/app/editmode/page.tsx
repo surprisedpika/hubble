@@ -28,36 +28,115 @@ export default function Page() {
 
   return (
     <div className={styles.main}>
-      <p>{layout?.controller ? "a" : "b"}</p>
       <input
+        id="controller"
         type="checkbox"
         checked={layout?.controller ?? false}
-        onChange={() =>
-          updateLayout({
-            ...{ controller: !layout?.controller },
-          })
-        }
+        onChange={() => updateLayout({ controller: !layout?.controller })}
       ></input>
+      <label htmlFor="controller">Poll for controllers</label>
+      <br></br>
       <input
+        id="warnUnknown"
         type="checkbox"
         checked={layout?.warnUnknown ?? false}
-        onChange={() =>
-          updateLayout({
-            ...{ warnUnknown: !layout?.warnUnknown },
-          })
-        }
+        onChange={() => updateLayout({ warnUnknown: !layout?.warnUnknown })}
       ></input>
-      {/* Controller enabled, warn unknown */}
-      <ul>
-        <li>
+      <label htmlFor="warnUnknown">
+        Display warning when unknown keys are pressed
+      </label>
+      <br></br>
+      <br></br>
+      <table>
+        <thead>
+          <tr>
+            <td>Label</td>
+            <td>X Position</td>
+            <td>Y Position</td>
+            <td>CSS Classes</td>
+            <td>Keys</td>
+          </tr>
+        </thead>
+        <tbody>
+          {layout?.keys?.map((key, index) => {
+            return (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="text"
+                    value={key.label}
+                    onChange={(event) => {
+                      if (layout.keys === undefined) {
+                        return;
+                      }
+
+                      let newKeys = [...layout.keys];
+                      newKeys[index].label = event.currentTarget.value;
+                      updateLayout({ keys: newKeys });
+                    }}
+                  ></input>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    value={key.posX}
+                    onChange={(event) => {
+                      if (layout.keys === undefined) {
+                        return;
+                      }
+
+                      let newKeys = [...layout.keys];
+                      if (event.currentTarget.value === "") {
+                        event.currentTarget.value = "0";
+                      }
+                      newKeys[index].posX = Number.parseFloat(
+                        event.currentTarget.value
+                      );
+                      updateLayout({ keys: newKeys });
+                    }}
+                  ></input>
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    value={key.posY}
+                    onChange={(event) => {
+                      if (layout.keys === undefined) {
+                        return;
+                      }
+
+                      let newKeys = [...layout.keys];
+                      if (event.currentTarget.value === "") {
+                        event.currentTarget.value = "0";
+                      }
+                      newKeys[index].posY = Number.parseFloat(
+                        event.currentTarget.value
+                      );
+                      updateLayout({ keys: newKeys });
+                    }}
+                  ></input>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={key.classes}
+                    onChange={(event) => {
+                      if (layout.keys === undefined) {
+                        return;
+                      }
+
+                      let newKeys = [...layout.keys];
+                      newKeys[index].classes = event.currentTarget.value;
+                      updateLayout({ keys: newKeys });
+                    }}
+                  ></input>
+                </td>
+              </tr>
+            );
+          })}
           {/* label, keys, posX, posY, classes */}
-          <input></input>
-          <input></input>
-          <input></input>
-          <input></input>
-          <input></input>
-        </li>
-      </ul>
+        </tbody>
+      </table>
     </div>
   );
 }

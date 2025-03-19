@@ -66,3 +66,7 @@
 .normal:nth-child(n + 7):nth-child(-n + 9) {
   --extra-offset: 8em;
 }
+
+.bingus {
+  --color: blue !important;
+}
