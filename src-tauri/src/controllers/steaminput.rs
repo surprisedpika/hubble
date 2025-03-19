@@ -4,13 +4,13 @@ use crate::controller::{ Controller, GetBit };
 pub enum SteamInput {
     // This might only work for steam controllers or it might generalise I don't know
 
-    // 0 - 7: Always (?) 0b0
-    // 8 - 15: As above
-    // 16 - 23: As above
-    // 24-31: Always (?) 0b1011
+    // 0 - 7   (1 byte): Always (?) 0b0
+    // 8 - 15  (1 byte): As above
+    // 16 - 23 (1 byte): As above
+    // 24 - 31 (1 byte): Always (?) 0b1011
 
-    // 32-55: rstick
-    // 56-79: lstick
+    // 32 - 55 (3 byte): rstick
+    // 56 - 79 (3 byte): lstick
 
     LTrigger = 80,
     LBumper = 81,
@@ -39,9 +39,9 @@ pub enum SteamInput {
     X = 102,
     Y = 103,
 
-    // 104-111: Always (?) 0b10000000
-    // 112-119: Motion Data
-    // 120-127: Always (?) 0b00110000
+    // 104-111 (1 byte): Always (?) 0b10000000
+    // 112-119 (1 byte): Motion Data
+    // 120-127 (1 byte): Always (?) 0b00110000
 }
 
 impl SteamInput {
