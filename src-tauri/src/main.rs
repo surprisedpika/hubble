@@ -73,6 +73,7 @@ async fn get_layout(previous_path: Option<String>) -> Option<(String, String, St
 
 #[tauri::command]
 async fn set_layout(data: String, path_str: String) {
+    println!("GAMING");
     if let Ok(path) = PathBuf::from_str(path_str.as_str()) {
         let mut file_path = path.clone();
 

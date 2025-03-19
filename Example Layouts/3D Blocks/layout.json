@@ -1,5 +1,5 @@
 {
-  "warnUnknown": true,
+  "warnUnknown": false,
   "controller": false,
   "keys": [
     {
