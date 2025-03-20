@@ -1,12 +1,13 @@
 "use client";
 import { LayoutData } from "@/components/wrapper/wrapper";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { emit, listen } from "@tauri-apps/api/event";
 
 import styles from "./styles.module.scss";
 
 export default function Page() {
   const [layout, setLayout] = useState<LayoutData | null>(null);
+  const hasInit = useRef(false);
 
   const updateLayout = async (data: Partial<LayoutData>) => {
     const newData = { ...layout, ...data };
@@ -15,7 +16,11 @@ export default function Page() {
   };
 
   useEffect(() => {
-    emit("editModeLoaded", layout);
+    if (hasInit.current === false) {
+      // Run on mount
+      hasInit.current = true;
+      emit("editModeLoaded", layout);
+    }
 
     if (typeof window !== undefined) {
       const unlisten = listen("layoutData", (event) => {
