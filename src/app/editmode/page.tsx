@@ -131,10 +131,28 @@ export default function Page() {
                     }}
                   ></input>
                 </td>
+                <td>
+                  <input
+                    type="text"
+                    value={
+                      typeof key.keys === "string"
+                        ? key.keys
+                        : key.keys.join(" ")
+                    }
+                    onChange={(event) => {
+                      if (layout.keys === undefined) {
+                        return;
+                      }
+
+                      let newKeys = [...layout.keys];
+                      newKeys[index].keys = event.currentTarget.value.split(" ");
+                      updateLayout({keys: newKeys});
+                    }}
+                  ></input>
+                </td>
               </tr>
             );
           })}
-          {/* label, keys, posX, posY, classes */}
         </tbody>
       </table>
     </div>
