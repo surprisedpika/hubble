@@ -95,10 +95,10 @@ export default function Wrapper() {
       <style dangerouslySetInnerHTML={{ __html: style }} />
       {layout && style && <Keys layout={layout} />}
       <div className={styles.controls}>
-        <button className={styles.button} onClick={() => openEditMode()}>
+        <button className="button" onClick={() => openEditMode()}>
           Edit Layout
         </button>
-        <button onClick={() => getLayout()} className={styles.button}>
+        <button onClick={() => getLayout()} className="button">
           Change Layout
         </button>
       </div>

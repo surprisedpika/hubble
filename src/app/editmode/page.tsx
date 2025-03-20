@@ -145,8 +145,9 @@ export default function Page() {
                       }
 
                       let newKeys = [...layout.keys];
-                      newKeys[index].keys = event.currentTarget.value.split(" ");
-                      updateLayout({keys: newKeys});
+                      newKeys[index].keys =
+                        event.currentTarget.value.split(" ");
+                      updateLayout({ keys: newKeys });
                     }}
                   ></input>
                 </td>
@@ -155,6 +156,40 @@ export default function Page() {
           })}
         </tbody>
       </table>
+      <button
+        className="button"
+        onClick={() => {
+          if (layout === null || layout.keys === undefined) {
+            return;
+          }
+
+          let newKeys = [...layout.keys];
+          newKeys.push({
+            label: "",
+            keys: "",
+            posX: 0,
+            posY: 0,
+            classes: "",
+          });
+          updateLayout({ keys: newKeys });
+        }}
+      >
+        Add Element
+      </button>
+      <button
+        className="button"
+        onClick={() => {
+          if (layout === null || layout.keys === undefined) {
+            return;
+          }
+
+          let newKeys = [...layout.keys];
+          newKeys.pop();
+          updateLayout({ keys: newKeys });
+        }}
+      >
+        Remove Element
+      </button>
     </div>
   );
 }
