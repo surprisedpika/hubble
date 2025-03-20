@@ -15,6 +15,8 @@ export default function Page() {
   };
 
   useEffect(() => {
+    emit("editModeLoaded", layout);
+
     if (typeof window !== undefined) {
       const unlisten = listen("layoutData", (event) => {
         setLayout(event.payload!);
@@ -24,7 +26,7 @@ export default function Page() {
         unlisten.then((fn) => fn());
       };
     }
-  }, []);
+  }, [layout]);
 
   return (
     <div className={styles.main}>

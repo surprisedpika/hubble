@@ -33,14 +33,9 @@ export default function Wrapper() {
   const openEditMode = async () => {
     if (typeof window !== undefined) {
       const { WebviewWindow } = await import("@tauri-apps/api/window");
-      const webview = new WebviewWindow("editmode", {
+      new WebviewWindow("editmode", {
         url: "editmode",
         title: "Edit Layout",
-      });
-      webview.once("tauri://created", () => {
-        setTimeout(() => {
-          emit("layoutData", layout);
-        }, 1000);
       });
     }
   };
@@ -54,17 +49,22 @@ export default function Wrapper() {
     }
 
     if (typeof window !== undefined) {
-      const unlisten = listen("newLayout", (event) => {
+      const unlistenNewLayout = listen("newLayout", (event) => {
         const newData: LayoutData = event.payload!;
         writeLayout(newData);
         setLayout(newData);
       });
 
+      const unlistenEditOpened = listen("editModeLoaded", () => {
+        emit("layoutData", layout);
+      })
+
       return () => {
-        unlisten.then((fn) => fn());
+        unlistenNewLayout.then((fn) => fn());
+        unlistenEditOpened.then(fn => fn());
       };
     }
-  }, []);
+  }, [layout]);
 
   const getLayout = async (path?: string) => {
     await invoke<[string, string, string] | null>("get_layout", {
