@@ -67,6 +67,7 @@ name = "app"
 version = "0.3.0"
 dependencies = [
  "hidapi",
+ "proc_mem",
  "rdev",
  "serde",
  "serde_json",
@@ -2059,6 +2060,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5e719e8df665df0d1c8fbfd238015744736151d4445ec0836b8e628aae103b77"
 dependencies = [
  "unicode-ident",
+]
+
+[[package]]
+name = "proc_mem"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5c0dc0491bb8c32eda5ac30b9c84d799c2074a8717d51fab790318ba6bb89eb9"
+dependencies = [
+ "regex",
+ "winapi",
 ]
 
 [[package]]

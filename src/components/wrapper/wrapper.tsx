@@ -101,6 +101,9 @@ export default function Wrapper() {
         <button onClick={() => getLayout()} className="button">
           Change Layout
         </button>
+        <button onClick={() => invoke("main")}>
+          erm
+        </button>
       </div>
     </div>
   );
