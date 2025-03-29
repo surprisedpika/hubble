@@ -9,7 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@babel/preset-react": "^7.26.3",
+    "@babel/standalone": "^7.27.0",
     "@tauri-apps/api": "^1.6.0",
+    "@types/babel__standalone": "^7.1.9",
     "class-variance-authority": "^0.7.1",
     "next": "^14.2.21",
     "react": "^18.3.1",

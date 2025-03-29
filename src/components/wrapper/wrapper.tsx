@@ -1,11 +1,13 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import { emit, listen } from "@tauri-apps/api/event";
+import { transform } from "@babel/standalone";
 
 import Keys from "@/components/keys/keys";
 
 import styles from "./styles.module.scss";
+import { jsx } from "react/jsx-runtime";
 
 export interface LayoutData {
   warnUnknown?: boolean;
@@ -22,12 +24,17 @@ export interface LayoutData {
 const LAYOUT_PATH = "layoutPath";
 
 const writeLayout = async (data: LayoutData) => {
-  await invoke("set_layout", {data: JSON.stringify(data), pathStr: localStorage.getItem(LAYOUT_PATH) })
-}
+  await invoke("set_layout", {
+    data: JSON.stringify(data),
+    pathStr: localStorage.getItem(LAYOUT_PATH),
+  });
+  React.createElement("");
+};
 
 export default function Wrapper() {
   const [layout, setLayout] = useState<LayoutData | null>(null);
   const [style, setStyle] = useState<string>("");
+  const [d, setD] = useState(<>ERM 2</>);
   const hasInit = useRef(false);
 
   const openEditMode = async () => {
@@ -57,11 +64,11 @@ export default function Wrapper() {
 
       const unlistenEditOpened = listen("editModeLoaded", () => {
         emit("layoutData", layout);
-      })
+      });
 
       return () => {
         unlistenNewLayout.then((fn) => fn());
-        unlistenEditOpened.then(fn => fn());
+        unlistenEditOpened.then((fn) => fn());
       };
     }
   }, [layout]);
@@ -101,8 +108,29 @@ export default function Wrapper() {
         <button onClick={() => getLayout()} className="button">
           Change Layout
         </button>
-        <button onClick={() => invoke("main")}>
-          erm
+        <button onClick={() => invoke("main")}>erm</button>
+        <button
+          onClick={() => {
+            let fileContents = "setD(<p>hi</p>)"
+
+            let jsCode = transform(fileContents, {
+              presets: [["react", { runtime: "automatic" }]],
+              sourceType: "unambiguous",
+            }).code;
+
+            if (jsCode) {
+              jsCode = jsCode.replace(
+                /require\(["']react\/jsx-runtime["']\)/g,
+                "React"
+              );
+              const a = {
+                jsx: jsx
+              }
+              new Function('React', 'setD', jsCode)(a, setD);
+            }
+          }}
+        >
+          {d}
         </button>
       </div>
     </div>
