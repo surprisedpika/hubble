@@ -29,6 +29,8 @@ Layouts are stored in a `layout.json` file and `layout.css` file. The JSON has t
 }
 ```
 
+You can manually edit layout files, or use the built-in editor.
+
 ### Warn Unknown
 
 Defaults to true. When keys unknown to the program are encountered, show a popup.

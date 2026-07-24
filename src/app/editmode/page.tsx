@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { emit, listen } from "@tauri-apps/api/event";
 
 import styles from "./styles.module.scss";
+import ControlledInput from "@/components/ControlledInput/ControlledInput";
+import ControlledTextArea from "@/components/ControlledTextArea/ControlledTextArea";
 
 export default function Page() {
   const [layout, setLayout] = useState<LayoutData | null>(null);
@@ -81,7 +83,7 @@ export default function Page() {
             return (
               <tr key={index}>
                 <td>
-                  <input
+                  <ControlledInput
                     type="text"
                     value={key.label}
                     onChange={(event) => {
@@ -90,11 +92,12 @@ export default function Page() {
                       newKeys[index].label = event.currentTarget.value;
                       updateLayout({ keys: newKeys });
                     }}
-                  ></input>
+                  ></ControlledInput>
                 </td>
                 <td>
-                  <input
-                    type="number"
+                  <ControlledInput
+                    type="text"
+                    inputMode="numeric"
                     value={key.posX}
                     onChange={(event) => {
                       if (layout.keys === undefined) return;
@@ -105,11 +108,12 @@ export default function Page() {
                       newKeys[index].posX = Number.parseFloat(event.currentTarget.value);
                       updateLayout({ keys: newKeys });
                     }}
-                  ></input>
+                  ></ControlledInput>
                 </td>
                 <td>
-                  <input
-                    type="number"
+                  <ControlledInput
+                    type="text"
+                    inputMode="numeric"
                     value={key.posY}
                     onChange={(event) => {
                       if (layout.keys === undefined) return;
@@ -120,10 +124,10 @@ export default function Page() {
                       newKeys[index].posY = Number.parseFloat(event.currentTarget.value);
                       updateLayout({ keys: newKeys });
                     }}
-                  ></input>
+                  ></ControlledInput>
                 </td>
                 <td>
-                  <input //Classes input
+                  <ControlledInput //Classes input
                     type="text"
                     value={key.classes}
                     onChange={(event) => {
@@ -132,10 +136,10 @@ export default function Page() {
                       newKeys[index].classes = event.currentTarget.value;
                       updateLayout({ keys: newKeys });
                     }}
-                  ></input>
+                  ></ControlledInput>
                 </td>
                 <td>
-                  <input //Keys input
+                  <ControlledInput //Keys input
                     type="text"
                     value={typeof key.keys === "string" ? key.keys : key.keys.join(",")}
                     onChange={(event) => {
@@ -144,7 +148,7 @@ export default function Page() {
                       newKeys[index].keys = event.currentTarget.value.split(",");
                       updateLayout({ keys: newKeys });
                     }}
-                  ></input>
+                  ></ControlledInput>
                 </td>
               </tr>
             );
@@ -180,14 +184,14 @@ export default function Page() {
         Remove Element
       </button>
       <h3>CSS</h3>
-      <textarea
+      <ControlledTextArea
         placeholder=".key { color: red }"
         spellCheck="false"
         value={style}
         onChange={async (e) => {
           updateLayout(e.target.value);
         }}
-      ></textarea>
+      ></ControlledTextArea>
     </div>
   );
 }
