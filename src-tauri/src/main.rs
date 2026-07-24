@@ -11,7 +11,6 @@ use tauri::api::dialog::blocking::FileDialogBuilder;
 mod kbm;
 mod controller;
 mod controllers;
-mod ramwatch;
 
 static KEYS: OnceLock<Arc<RwLock<HashSet<String>>>> = OnceLock::new();
 static CONTROLLER: OnceLock<Arc<RwLock<Controller>>> = OnceLock::new();
@@ -34,8 +33,7 @@ fn main() {
                 controller,
                 start_controller_polling,
                 stop_controller_polling,
-                set_layout,
-                ramwatch::main
+                set_layout
             ]
         )
         .run(tauri::generate_context!())

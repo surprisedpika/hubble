@@ -2,12 +2,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import { emit, listen } from "@tauri-apps/api/event";
-import { transform } from "@babel/standalone";
 
 import Keys from "@/components/keys/keys";
 
 import styles from "./styles.module.scss";
-import { jsx } from "react/jsx-runtime";
 
 export interface LayoutData {
   warnUnknown?: boolean;
@@ -34,7 +32,6 @@ const writeLayout = async (data: LayoutData) => {
 export default function Wrapper() {
   const [layout, setLayout] = useState<LayoutData | null>(null);
   const [style, setStyle] = useState<string>("");
-  const [d, setD] = useState(<>ERM 2</>);
   const hasInit = useRef(false);
 
   const openEditMode = async () => {
@@ -107,30 +104,6 @@ export default function Wrapper() {
         </button>
         <button onClick={() => getLayout()} className="button">
           Change Layout
-        </button>
-        <button onClick={() => invoke("main")}>erm</button>
-        <button
-          onClick={() => {
-            let fileContents = "setD(<p>hi</p>)"
-
-            let jsCode = transform(fileContents, {
-              presets: [["react", { runtime: "automatic" }]],
-              sourceType: "unambiguous",
-            }).code;
-
-            if (jsCode) {
-              jsCode = jsCode.replace(
-                /require\(["']react\/jsx-runtime["']\)/g,
-                "React"
-              );
-              const a = {
-                jsx: jsx
-              }
-              new Function('React', 'setD', jsCode)(a, setD);
-            }
-          }}
-        >
-          {d}
         </button>
       </div>
     </div>
