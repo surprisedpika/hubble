@@ -23,7 +23,7 @@ const LAYOUT_PATH = "layoutPath";
 
 const writeLayout = async (data: LayoutData) => {
   await invoke("set_layout", {
-    data: JSON.stringify(data),
+    json_data: JSON.stringify(data),
     pathStr: localStorage.getItem(LAYOUT_PATH),
   });
   React.createElement("");

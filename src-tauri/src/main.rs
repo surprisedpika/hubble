@@ -1,41 +1,38 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+use controller::Controller;
+use std::collections::HashSet;
 use std::fs;
 use std::path::PathBuf;
 use std::str::FromStr;
-use std::sync::{ Arc, OnceLock, RwLock };
-use std::collections::HashSet;
-use controller::Controller;
+use std::sync::{Arc, OnceLock, RwLock};
 use tauri::api::dialog::blocking::FileDialogBuilder;
 
-mod kbm;
 mod controller;
 mod controllers;
+mod kbm;
 
 static KEYS: OnceLock<Arc<RwLock<HashSet<String>>>> = OnceLock::new();
 static CONTROLLER: OnceLock<Arc<RwLock<Controller>>> = OnceLock::new();
 pub static SHOULD_POLL_CONTROLLER: OnceLock<Arc<RwLock<bool>>> = OnceLock::new();
 
 fn main() {
-    tauri::Builder
-        ::default()
+    tauri::Builder::default()
         .setup(|_app| {
             std::thread::spawn(move || {
                 kbm::start();
             });
             Ok(())
         })
-        .invoke_handler(
-            tauri::generate_handler![
-                keys,
-                get_layout,
-                unstick_key,
-                controller,
-                start_controller_polling,
-                stop_controller_polling,
-                set_layout
-            ]
-        )
+        .invoke_handler(tauri::generate_handler![
+            keys,
+            get_layout,
+            unstick_key,
+            controller,
+            start_controller_polling,
+            stop_controller_polling,
+            set_layout
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -64,6 +61,32 @@ async fn get_layout(previous_path: Option<String>) -> Option<(String, String, St
         }
     }
 
+    if json_data.is_none() {
+        // Create json file if not exists
+        let default_json_data = "{\"warnUnknown\":true,\"controller\":false,\"keys\":[]}";
+        let mut json_path = path.clone();
+        json_path.push("layout.json");
+        let _ = fs::write(json_path, default_json_data);
+        json_data = Some(default_json_data.to_string());
+    }
+
+    if json_data.is_none() {
+        // Create json file if not exists
+        let default_json_data = "{\"warnUnknown\":true,\"controller\":false,\"keys\":[]}";
+        let mut json_path = path.clone();
+        json_path.push("layout.json");
+        let _ = fs::write(json_path, default_json_data);
+        json_data = Some(default_json_data.to_string());
+    }
+
+    if css_data.is_none() {
+        // Create css file if not exists
+        let mut css_path = path.clone();
+        css_path.push("layout.css");
+        let _ = fs::File::create_new(css_path);
+        css_data = Some("".to_string());
+    }
+
     if let (Some(json), Some(css)) = (json_data, css_data) {
         let path_str = path.to_str()?.to_string();
         return Some((json, css, path_str));
@@ -72,19 +95,13 @@ async fn get_layout(previous_path: Option<String>) -> Option<(String, String, St
 }
 
 #[tauri::command]
-async fn set_layout(data: String, path_str: String) {
-    if let Ok(path) = PathBuf::from_str(path_str.as_str()) {
-        let mut file_path = path.clone();
+async fn set_layout(json_data: String, path_str: String) {
+    let Ok(path) = PathBuf::from_str(path_str.as_str());
+    let mut file_path = path.clone();
 
-        // Write json data
-        file_path.push("layout.json");
-        let _ = fs::write(file_path.clone(), data);
-
-        // Create css file if it doesn't exist
-        file_path.pop();
-        file_path.push("layout.css");
-        let _ = fs::OpenOptions::new().write(true).create_new(true).open(file_path);
-    };
+    // Write json data
+    file_path.push("layout.json");
+    let _ = fs::write(file_path.clone(), json_data);
 }
 
 // KBM
