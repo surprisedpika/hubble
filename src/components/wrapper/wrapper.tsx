@@ -19,14 +19,19 @@ export interface LayoutData {
   }[];
 }
 
+export interface PayloadData {
+  style: string;
+  layout: LayoutData;
+}
+
 const LAYOUT_PATH = "layoutPath";
 
-const writeLayout = async (data: LayoutData) => {
+const writeLayout = async (data: LayoutData, css: string) => {
   await invoke("set_layout", {
-    json_data: JSON.stringify(data),
+    jsonData: JSON.stringify(data),
+    cssData: css,
     pathStr: localStorage.getItem(LAYOUT_PATH),
   });
-  React.createElement("");
 };
 
 export default function Wrapper() {
@@ -54,13 +59,15 @@ export default function Wrapper() {
 
     if (typeof window !== undefined) {
       const unlistenNewLayout = listen("newLayout", (event) => {
-        const newData: LayoutData = event.payload!;
-        writeLayout(newData);
-        setLayout(newData);
+        const newData: PayloadData = event.payload as PayloadData;
+        writeLayout(newData.layout, newData.style);
+        setStyle(newData.style);
+        setLayout(newData.layout);
       });
 
       const unlistenEditOpened = listen("editModeLoaded", () => {
-        emit("layoutData", layout);
+        const payloadData: PayloadData = { layout: layout ?? {}, style: style };
+        emit("layoutData", payloadData);
       });
 
       return () => {
@@ -68,7 +75,7 @@ export default function Wrapper() {
         unlistenEditOpened.then((fn) => fn());
       };
     }
-  }, [layout]);
+  }, [layout, style]);
 
   const getLayout = async (path?: string) => {
     await invoke<[string, string, string] | null>("get_layout", {
@@ -94,7 +101,7 @@ export default function Wrapper() {
   };
 
   return (
-    <div>
+    <div style={{ overflow: "hidden" }}>
       {/* Can ignore "dangerous" as the css is user-defined and the app does not connect to a server */}
       <style dangerouslySetInnerHTML={{ __html: style }} />
       {layout && style && <Keys layout={layout} />}

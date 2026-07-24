@@ -1,5 +1,5 @@
 "use client";
-import { LayoutData } from "@/components/wrapper/wrapper";
+import { LayoutData, PayloadData } from "@/components/wrapper/wrapper";
 import { useEffect, useRef, useState } from "react";
 import { emit, listen } from "@tauri-apps/api/event";
 
@@ -7,12 +7,23 @@ import styles from "./styles.module.scss";
 
 export default function Page() {
   const [layout, setLayout] = useState<LayoutData | null>(null);
+  const [style, setStyle] = useState<string>("");
   const hasInit = useRef(false);
 
-  const updateLayout = async (data: Partial<LayoutData>) => {
-    const newData = { ...layout, ...data };
+  const updateLayout = async (data: Partial<LayoutData> | string) => {
+    let newLayout;
+    let newStyle;
+    if (typeof data === "string") {
+      newLayout = layout;
+      newStyle = data;
+    } else {
+      newLayout = { ...layout, ...data };
+      newStyle = style;
+    }
+    const newData: PayloadData = { layout: newLayout ?? {}, style: newStyle };
     await emit("newLayout", newData);
-    setLayout(newData);
+    setLayout(newLayout);
+    setStyle(newStyle);
   };
 
   useEffect(() => {
@@ -24,7 +35,9 @@ export default function Page() {
 
     if (typeof window !== undefined) {
       const unlisten = listen("layoutData", (event) => {
-        setLayout(event.payload!);
+        const data = event.payload as PayloadData;
+        setLayout(data.layout);
+        setStyle(data.style);
       });
 
       return () => {
@@ -35,6 +48,7 @@ export default function Page() {
 
   return (
     <div className={styles.main}>
+      <h2>Layout Editor</h2>
       <input
         id="controller"
         type="checkbox"
@@ -49,9 +63,7 @@ export default function Page() {
         checked={layout?.warnUnknown ?? false}
         onChange={() => updateLayout({ warnUnknown: !layout?.warnUnknown })}
       ></input>
-      <label htmlFor="warnUnknown">
-        Display warning when unknown keys are pressed
-      </label>
+      <label htmlFor="warnUnknown">Display warning when unknown keys are pressed</label>
       <br></br>
       <br></br>
       <table>
@@ -61,7 +73,7 @@ export default function Page() {
             <td>X Position</td>
             <td>Y Position</td>
             <td>CSS Classes</td>
-            <td>Keys</td>
+            <td>Keys (Comma Separated)</td>
           </tr>
         </thead>
         <tbody>
@@ -73,10 +85,7 @@ export default function Page() {
                     type="text"
                     value={key.label}
                     onChange={(event) => {
-                      if (layout.keys === undefined) {
-                        return;
-                      }
-
+                      if (layout.keys === undefined) return;
                       let newKeys = [...layout.keys];
                       newKeys[index].label = event.currentTarget.value;
                       updateLayout({ keys: newKeys });
@@ -88,17 +97,12 @@ export default function Page() {
                     type="number"
                     value={key.posX}
                     onChange={(event) => {
-                      if (layout.keys === undefined) {
-                        return;
-                      }
-
+                      if (layout.keys === undefined) return;
                       let newKeys = [...layout.keys];
                       if (event.currentTarget.value === "") {
                         event.currentTarget.value = "0";
                       }
-                      newKeys[index].posX = Number.parseFloat(
-                        event.currentTarget.value
-                      );
+                      newKeys[index].posX = Number.parseFloat(event.currentTarget.value);
                       updateLayout({ keys: newKeys });
                     }}
                   ></input>
@@ -108,30 +112,22 @@ export default function Page() {
                     type="number"
                     value={key.posY}
                     onChange={(event) => {
-                      if (layout.keys === undefined) {
-                        return;
-                      }
-
+                      if (layout.keys === undefined) return;
                       let newKeys = [...layout.keys];
                       if (event.currentTarget.value === "") {
                         event.currentTarget.value = "0";
                       }
-                      newKeys[index].posY = Number.parseFloat(
-                        event.currentTarget.value
-                      );
+                      newKeys[index].posY = Number.parseFloat(event.currentTarget.value);
                       updateLayout({ keys: newKeys });
                     }}
                   ></input>
                 </td>
                 <td>
-                  <input
+                  <input //Classes input
                     type="text"
                     value={key.classes}
                     onChange={(event) => {
-                      if (layout.keys === undefined) {
-                        return;
-                      }
-
+                      if (layout.keys === undefined) return;
                       let newKeys = [...layout.keys];
                       newKeys[index].classes = event.currentTarget.value;
                       updateLayout({ keys: newKeys });
@@ -139,21 +135,13 @@ export default function Page() {
                   ></input>
                 </td>
                 <td>
-                  <input
+                  <input //Keys input
                     type="text"
-                    value={
-                      typeof key.keys === "string"
-                        ? key.keys
-                        : key.keys.join(" ")
-                    }
+                    value={typeof key.keys === "string" ? key.keys : key.keys.join(",")}
                     onChange={(event) => {
-                      if (layout.keys === undefined) {
-                        return;
-                      }
-
+                      if (layout.keys === undefined) return;
                       let newKeys = [...layout.keys];
-                      newKeys[index].keys =
-                        event.currentTarget.value.split(" ");
+                      newKeys[index].keys = event.currentTarget.value.split(",");
                       updateLayout({ keys: newKeys });
                     }}
                   ></input>
@@ -163,13 +151,10 @@ export default function Page() {
           })}
         </tbody>
       </table>
-      <button
+      <button //Add element button
         className="button"
         onClick={() => {
-          if (layout === null || layout.keys === undefined) {
-            return;
-          }
-
+          if (layout === null || layout.keys === undefined) return;
           let newKeys = [...layout.keys];
           newKeys.push({
             label: "",
@@ -183,13 +168,10 @@ export default function Page() {
       >
         Add Element
       </button>
-      <button
+      <button //Remove element button
         className="button"
         onClick={() => {
-          if (layout === null || layout.keys === undefined) {
-            return;
-          }
-
+          if (layout === null || layout.keys === undefined) return;
           let newKeys = [...layout.keys];
           newKeys.pop();
           updateLayout({ keys: newKeys });
@@ -197,6 +179,15 @@ export default function Page() {
       >
         Remove Element
       </button>
+      <h3>CSS</h3>
+      <textarea
+        placeholder=".key { color: red }"
+        spellCheck="false"
+        value={style}
+        onChange={async (e) => {
+          updateLayout(e.target.value);
+        }}
+      ></textarea>
     </div>
   );
 }

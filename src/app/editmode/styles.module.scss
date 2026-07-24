@@ -5,6 +5,12 @@
     cursor: pointer;
   }
 
+  textarea {
+    width: 100%;
+    height: 80ch;
+    resize: none;
+  }
+
   table {
     width: 100%;
     border-collapse: collapse;

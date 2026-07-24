@@ -2,10 +2,10 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use controller::Controller;
 use std::collections::HashSet;
-use std::fs;
 use std::path::PathBuf;
 use std::str::FromStr;
 use std::sync::{Arc, OnceLock, RwLock};
+use std::{fs, println};
 use tauri::api::dialog::blocking::FileDialogBuilder;
 
 mod controller;
@@ -95,13 +95,16 @@ async fn get_layout(previous_path: Option<String>) -> Option<(String, String, St
 }
 
 #[tauri::command]
-async fn set_layout(json_data: String, path_str: String) {
-    let Ok(path) = PathBuf::from_str(path_str.as_str());
-    let mut file_path = path.clone();
-
+async fn set_layout(json_data: String, css_data: String, path_str: String) {
+    // println!("{}", css_data);
+    let Ok(mut path) = PathBuf::from_str(path_str.as_str());
     // Write json data
-    file_path.push("layout.json");
-    let _ = fs::write(file_path.clone(), json_data);
+    path.push("layout.json");
+    let _ = fs::write(path.clone(), json_data);
+    path.pop();
+    // Write css data
+    path.push("layout.css");
+    let _ = fs::write(path, css_data);
 }
 
 // KBM
